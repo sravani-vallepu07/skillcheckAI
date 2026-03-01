@@ -1,0 +1,16 @@
+{
+  "name": "student-code-review-app",
+  "version": "1.0.0",
+  "description": "Student code submission with voice explanation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.19.2",
+    "form-data": "^4.0.5",
+    "multer": "^2.1.0"
+  }
+}

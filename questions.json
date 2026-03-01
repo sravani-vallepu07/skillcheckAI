@@ -1,0 +1,1244 @@
+{
+  "weeks": [
+    {
+      "id": "week1",
+      "title": "Week 1",
+      "summary": "Easy warm-up questions",
+  "questions": [
+        {
+          "id": "w1q1",
+          "title": "Sum of Array",
+          "difficulty": "Easy",
+          "summary": "Compute the sum of all elements.",
+          "description": "Given an array of integers, return the sum of all values.",
+          "examples": [
+            { "input": "[1, 2, 3]", "output": "6" },
+            { "input": "[-5, 5, 10]", "output": "10" }
+          ]
+        },
+        {
+          "id": "w1q2",
+          "title": "Maximum Element",
+          "difficulty": "Easy",
+          "summary": "Find the maximum value in an array.",
+          "description": "Given an array of integers, return the maximum value.",
+          "examples": [
+            { "input": "[4, 2, 9, 1]", "output": "9" },
+            { "input": "[-1, -2, -3]", "output": "-1" }
+          ]
+        },
+        {
+          "id": "w1q3",
+          "title": "Count Vowels",
+          "difficulty": "Easy",
+          "summary": "Count vowels in a string.",
+          "description": "Given a string, count how many vowels it contains.",
+          "examples": [
+            { "input": "\"hello\"", "output": "2" },
+            { "input": "\"rhythm\"", "output": "0" }
+          ]
+        },
+        {
+          "id": "w1q4",
+          "title": "Reverse String",
+          "difficulty": "Easy",
+          "summary": "Reverse a string.",
+          "description": "Given a string, return it reversed.",
+          "examples": [
+            { "input": "\"abc\"", "output": "\"cba\"" },
+            { "input": "\"race\"", "output": "\"ecar\"" }
+          ]
+        },
+        {
+          "id": "w1q5",
+          "title": "Even or Odd Count",
+          "difficulty": "Easy",
+          "summary": "Count evens and odds.",
+          "description": "Given an array of integers, return counts of even and odd values.",
+          "examples": [
+            { "input": "[1, 2, 3, 4]", "output": "even=2, odd=2" },
+            { "input": "[2, 6, 8]", "output": "even=3, odd=0" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week2",
+      "title": "Week 2",
+      "summary": "Easy array and string practice",
+      "questions": [
+        {
+          "id": "w2q1",
+          "title": "Second Largest",
+          "difficulty": "Easy",
+          "summary": "Find second largest element.",
+          "description": "Given an array of integers, return the second largest distinct value.",
+          "examples": [
+            { "input": "[5, 1, 3, 4]", "output": "4" },
+            { "input": "[9, 9, 7]", "output": "7" }
+          ]
+        },
+        {
+          "id": "w2q2",
+          "title": "Palindrome Check",
+          "difficulty": "Easy",
+          "summary": "Check if string is a palindrome.",
+          "description": "Given a string, return true if it reads the same forward and backward.",
+          "examples": [
+            { "input": "\"level\"", "output": "true" },
+            { "input": "\"hello\"", "output": "false" }
+          ]
+        },
+        {
+          "id": "w2q3",
+          "title": "Array Rotation",
+          "difficulty": "Easy",
+          "summary": "Rotate array by k.",
+          "description": "Rotate an array to the right by k steps.",
+          "examples": [
+            { "input": "nums=[1,2,3,4], k=2", "output": "[3,4,1,2]" },
+            { "input": "nums=[1], k=3", "output": "[1]" }
+          ]
+        },
+        {
+          "id": "w2q4",
+          "title": "Frequency Count",
+          "difficulty": "Easy",
+          "summary": "Count occurrences.",
+          "description": "Return a map of element frequencies.",
+          "examples": [
+            { "input": "[1,1,2,3,3,3]", "output": "{1:2,2:1,3:3}" },
+            { "input": "[]", "output": "{}" }
+          ]
+        },
+        {
+          "id": "w2q5",
+          "title": "Remove Duplicates",
+          "difficulty": "Easy",
+          "summary": "Remove duplicates from array.",
+          "description": "Return an array with unique values in order.",
+          "examples": [
+            { "input": "[1,2,2,3]", "output": "[1,2,3]" },
+            { "input": "[4,4,4]", "output": "[4]" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week3",
+      "title": "Week 3",
+      "summary": "Easy to medium basics",
+      "questions": [
+        {
+          "id": "w3q1",
+      "title": "Two Sum",
+          "difficulty": "Easy",
+          "summary": "Find indices that sum to target.",
+          "description": "Return indices of two numbers such that they add up to target.",
+          "examples": [
+            { "input": "nums=[2,7,11,15], target=9", "output": "[0,1]" },
+            { "input": "nums=[3,2,4], target=6", "output": "[1,2]" }
+          ]
+        },
+        {
+          "id": "w3q2",
+          "title": "Missing Number",
+          "difficulty": "Easy",
+          "summary": "Find missing number 0..n.",
+          "description": "Given array containing numbers 0..n, return the missing number.",
+          "examples": [
+            { "input": "[3,0,1]", "output": "2" },
+            { "input": "[0,1]", "output": "2" }
+          ]
+        },
+        {
+          "id": "w3q3",
+          "title": "Valid Parentheses",
+          "difficulty": "Easy",
+          "summary": "Check bracket balance.",
+          "description": "Return true if brackets are properly closed.",
+          "examples": [
+            { "input": "\"()[]{}\"", "output": "true" },
+            { "input": "\"(]\"", "output": "false" }
+          ]
+        },
+        {
+          "id": "w3q4",
+          "title": "Merge Two Sorted Lists",
+          "difficulty": "Easy",
+          "summary": "Merge two sorted arrays.",
+          "description": "Given two sorted arrays, return a merged sorted array.",
+          "examples": [
+            { "input": "[1,3], [2,4]", "output": "[1,2,3,4]" },
+            { "input": "[], [5]", "output": "[5]" }
+          ]
+        },
+        {
+          "id": "w3q5",
+          "title": "Climbing Stairs",
+          "difficulty": "Easy",
+          "summary": "Count ways to climb steps.",
+          "description": "Return number of distinct ways to climb n stairs (1 or 2 steps).",
+          "examples": [
+            { "input": "n=2", "output": "2" },
+            { "input": "n=3", "output": "3" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week4",
+      "title": "Week 4",
+      "summary": "Easy and mixed practice",
+      "questions": [
+        {
+          "id": "w4q1",
+          "title": "Anagram Check",
+          "difficulty": "Easy",
+          "summary": "Check if two strings are anagrams.",
+          "description": "Return true if both strings contain the same letters.",
+          "examples": [
+            { "input": "\"listen\", \"silent\"", "output": "true" },
+            { "input": "\"apple\", \"pale\"", "output": "false" }
+          ]
+        },
+        {
+          "id": "w4q2",
+          "title": "Longest Word",
+          "difficulty": "Easy",
+          "summary": "Find longest word in sentence.",
+          "description": "Return the longest word from a sentence string.",
+          "examples": [
+            { "input": "\"we love coding\"", "output": "\"coding\"" },
+            { "input": "\"hello world\"", "output": "\"hello\"" }
+          ]
+        },
+        {
+          "id": "w4q3",
+          "title": "Move Zeros",
+          "difficulty": "Easy",
+          "summary": "Move zeros to end.",
+          "description": "Move all zeros to the end while maintaining order.",
+          "examples": [
+            { "input": "[0,1,0,3,12]", "output": "[1,3,12,0,0]" },
+            { "input": "[0,0,1]", "output": "[1,0,0]" }
+          ]
+        },
+        {
+          "id": "w4q4",
+          "title": "Pair Sum",
+          "difficulty": "Easy",
+          "summary": "Find if any pair equals target.",
+          "description": "Return true if any two numbers sum to target.",
+          "examples": [
+            { "input": "nums=[1,4,6], target=10", "output": "true" },
+            { "input": "nums=[1,2,3], target=7", "output": "false" }
+          ]
+        },
+        {
+          "id": "w4q5",
+          "title": "Running Sum",
+          "difficulty": "Easy",
+          "summary": "Compute prefix sums.",
+          "description": "Return array where each element is the sum up to that index.",
+          "examples": [
+            { "input": "[1,2,3,4]", "output": "[1,3,6,10]" },
+            { "input": "[5]", "output": "[5]" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week5",
+      "title": "Week 5",
+      "summary": "Easy and medium mix",
+      "questions": [
+        {
+          "id": "w5q1",
+          "title": "Binary Search",
+          "difficulty": "Medium",
+          "summary": "Find target in sorted array.",
+          "description": "Return index of target in sorted array or -1.",
+          "examples": [
+            { "input": "nums=[1,2,3,4,5], target=4", "output": "3" },
+            { "input": "nums=[1,2,3], target=6", "output": "-1" }
+          ]
+        },
+        {
+          "id": "w5q2",
+          "title": "First Unique Character",
+          "difficulty": "Easy",
+          "summary": "Find first non-repeating char.",
+          "description": "Return index of first non-repeating character in a string.",
+          "examples": [
+            { "input": "\"leetcode\"", "output": "0" },
+            { "input": "\"aabb\"", "output": "-1" }
+          ]
+        },
+        {
+          "id": "w5q3",
+          "title": "Reverse Linked List",
+          "difficulty": "Medium",
+          "summary": "Reverse a linked list.",
+          "description": "Return the head of the reversed linked list.",
+          "examples": [
+            { "input": "1->2->3", "output": "3->2->1" },
+            { "input": "1", "output": "1" }
+          ]
+        },
+        {
+          "id": "w5q4",
+          "title": "Valid Palindrome",
+          "difficulty": "Easy",
+          "summary": "Check alphanumeric palindrome.",
+          "description": "Ignore non-alphanumeric and case; return true if palindrome.",
+          "examples": [
+            { "input": "\"A man, a plan, a canal: Panama\"", "output": "true" },
+            { "input": "\"race a car\"", "output": "false" }
+          ]
+        },
+        {
+          "id": "w5q5",
+          "title": "Subarray Sum",
+          "difficulty": "Medium",
+          "summary": "Find subarray sum equals k.",
+          "description": "Return count of subarrays that sum to k.",
+          "examples": [
+            { "input": "nums=[1,1,1], k=2", "output": "2" },
+            { "input": "nums=[1,2,3], k=3", "output": "2" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week6",
+      "title": "Week 6",
+      "summary": "Medium array/string focus",
+      "questions": [
+        {
+          "id": "w6q1",
+          "title": "Longest Substring Without Repeating",
+          "difficulty": "Medium",
+          "summary": "Find max length of unique substring.",
+          "description": "Return length of longest substring without repeating characters.",
+          "examples": [
+            { "input": "\"abcabcbb\"", "output": "3" },
+            { "input": "\"bbbbb\"", "output": "1" }
+          ]
+        },
+        {
+          "id": "w6q2",
+          "title": "Group Anagrams",
+          "difficulty": "Medium",
+          "summary": "Group words by anagram.",
+          "description": "Group strings that are anagrams of each other.",
+          "examples": [
+            { "input": "[\"eat\",\"tea\",\"tan\",\"ate\"]", "output": "[[\"eat\",\"tea\",\"ate\"],[\"tan\"]]" },
+            { "input": "[\"a\"]", "output": "[[\"a\"]]" }
+          ]
+        },
+        {
+          "id": "w6q3",
+          "title": "Merge Intervals",
+          "difficulty": "Medium",
+          "summary": "Merge overlapping intervals.",
+          "description": "Given intervals, merge all overlapping ones.",
+          "examples": [
+            { "input": "[[1,3],[2,6],[8,10]]", "output": "[[1,6],[8,10]]" },
+            { "input": "[[1,4],[4,5]]", "output": "[[1,5]]" }
+          ]
+        },
+        {
+          "id": "w6q4",
+          "title": "Top K Frequent",
+          "difficulty": "Medium",
+          "summary": "Find k most frequent elements.",
+          "description": "Return the k most frequent elements.",
+          "examples": [
+            { "input": "nums=[1,1,1,2,2,3], k=2", "output": "[1,2]" },
+            { "input": "nums=[1], k=1", "output": "[1]" }
+          ]
+        },
+        {
+          "id": "w6q5",
+          "title": "Product of Array Except Self",
+          "difficulty": "Medium",
+          "summary": "Compute product except self.",
+          "description": "Return array where each element is product of others.",
+          "examples": [
+            { "input": "[1,2,3,4]", "output": "[24,12,8,6]" },
+            { "input": "[2,3]", "output": "[3,2]" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week7",
+      "title": "Week 7",
+      "summary": "Medium patterns",
+      "questions": [
+        {
+          "id": "w7q1",
+          "title": "Longest Palindromic Substring",
+          "difficulty": "Medium",
+          "summary": "Find longest palindrome substring.",
+          "description": "Return longest palindromic substring in a string.",
+          "examples": [
+            { "input": "\"babad\"", "output": "\"bab\"" },
+            { "input": "\"cbbd\"", "output": "\"bb\"" }
+          ]
+        },
+        {
+          "id": "w7q2",
+          "title": "3Sum",
+          "difficulty": "Medium",
+          "summary": "Find triplets sum to zero.",
+          "description": "Return all unique triplets that sum to zero.",
+          "examples": [
+            { "input": "[-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]" },
+            { "input": "[0,1,1]", "output": "[]" }
+          ]
+        },
+        {
+          "id": "w7q3",
+          "title": "Min Stack",
+          "difficulty": "Medium",
+          "summary": "Stack with min operation.",
+          "description": "Design a stack that supports push/pop/top and getMin in O(1).",
+          "examples": [
+            { "input": "push 3, push 1, getMin", "output": "1" },
+            { "input": "pop, getMin", "output": "3" }
+          ]
+        },
+        {
+          "id": "w7q4",
+          "title": "Longest Consecutive Sequence",
+          "difficulty": "Medium",
+          "summary": "Find longest consecutive run.",
+          "description": "Return length of longest consecutive elements sequence.",
+          "examples": [
+            { "input": "[100,4,200,1,3,2]", "output": "4" },
+            { "input": "[0,3,7,2,5,8,4,6,0,1]", "output": "9" }
+          ]
+        },
+        {
+          "id": "w7q5",
+          "title": "Search in Rotated Sorted Array",
+          "difficulty": "Medium",
+          "summary": "Find target in rotated array.",
+          "description": "Return index of target in rotated sorted array.",
+          "examples": [
+            { "input": "nums=[4,5,6,7,0,1,2], target=0", "output": "4" },
+            { "input": "nums=[4,5,6], target=3", "output": "-1" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week8",
+      "title": "Week 8",
+      "summary": "Medium mixed practice",
+      "questions": [
+        {
+          "id": "w8q1",
+          "title": "Container With Most Water",
+          "difficulty": "Medium",
+          "summary": "Max area between lines.",
+          "description": "Find the maximum area of water container.",
+          "examples": [
+            { "input": "[1,8,6,2,5,4,8,3,7]", "output": "49" },
+            { "input": "[1,1]", "output": "1" }
+          ]
+        },
+        {
+          "id": "w8q2",
+          "title": "Rotate Matrix",
+          "difficulty": "Medium",
+          "summary": "Rotate matrix 90 degrees.",
+          "description": "Rotate an NxN matrix clockwise by 90 degrees.",
+          "examples": [
+            { "input": "[[1,2],[3,4]]", "output": "[[3,1],[4,2]]" },
+            { "input": "[[1]]", "output": "[[1]]" }
+          ]
+        },
+        {
+          "id": "w8q3",
+          "title": "Kth Largest Element",
+          "difficulty": "Medium",
+          "summary": "Find kth largest number.",
+          "description": "Return kth largest element in array.",
+          "examples": [
+            { "input": "[3,2,1,5,6,4], k=2", "output": "5" },
+            { "input": "[3,2,3,1], k=4", "output": "1" }
+          ]
+        },
+        {
+          "id": "w8q4",
+          "title": "Subsets",
+          "difficulty": "Medium",
+          "summary": "Generate all subsets.",
+          "description": "Return all possible subsets of the array.",
+          "examples": [
+            { "input": "[1,2]", "output": "[[],[1],[2],[1,2]]" },
+            { "input": "[0]", "output": "[[],[0]]" }
+          ]
+        },
+        {
+          "id": "w8q5",
+          "title": "Decode String",
+          "difficulty": "Medium",
+          "summary": "Decode encoded strings.",
+          "description": "Decode strings like 3[a2[c]] to accaccacc.",
+          "examples": [
+            { "input": "\"3[a]2[bc]\"", "output": "\"aaabcbc\"" },
+            { "input": "\"3[a2[c]]\"", "output": "\"accaccacc\"" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week9",
+      "title": "Week 9",
+      "summary": "Medium difficulty rise",
+      "questions": [
+        {
+          "id": "w9q1",
+          "title": "Binary Tree Level Order",
+          "difficulty": "Medium",
+          "summary": "Level order traversal.",
+          "description": "Return level order traversal of a binary tree.",
+          "examples": [
+            { "input": "[3,9,20,null,null,15,7]", "output": "[[3],[9,20],[15,7]]" },
+            { "input": "[]", "output": "[]" }
+          ]
+        },
+        {
+          "id": "w9q2",
+          "title": "Validate BST",
+          "difficulty": "Medium",
+          "summary": "Check if tree is BST.",
+          "description": "Return true if binary tree is a valid BST.",
+          "examples": [
+            { "input": "[2,1,3]", "output": "true" },
+            { "input": "[5,1,4,null,null,3,6]", "output": "false" }
+          ]
+        },
+        {
+          "id": "w9q3",
+          "title": "Coin Change",
+          "difficulty": "Medium",
+          "summary": "Fewest coins to make amount.",
+          "description": "Return minimum coins to make up amount, or -1.",
+          "examples": [
+            { "input": "coins=[1,2,5], amount=11", "output": "3" },
+            { "input": "coins=[2], amount=3", "output": "-1" }
+          ]
+        },
+        {
+          "id": "w9q4",
+          "title": "Longest Increasing Subsequence",
+          "difficulty": "Medium",
+          "summary": "Find LIS length.",
+          "description": "Return length of longest increasing subsequence.",
+          "examples": [
+            { "input": "[10,9,2,5,3,7,101,18]", "output": "4" },
+            { "input": "[0,1,0,3,2,3]", "output": "4" }
+          ]
+        },
+        {
+          "id": "w9q5",
+          "title": "Word Break",
+          "difficulty": "Medium",
+          "summary": "Check if string can be segmented.",
+          "description": "Return true if s can be segmented into dictionary words.",
+          "examples": [
+            { "input": "s=\"leetcode\", wordDict=[\"leet\",\"code\"]", "output": "true" },
+            { "input": "s=\"catsandog\", wordDict=[\"cats\",\"dog\"]", "output": "false" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week10",
+      "title": "Week 10",
+      "summary": "Medium to hard transition",
+      "questions": [
+        {
+          "id": "w10q1",
+          "title": "Course Schedule",
+          "difficulty": "Medium",
+          "summary": "Detect if all courses can be finished.",
+          "description": "Return true if possible to finish all courses.",
+          "examples": [
+            { "input": "num=2, prereq=[[1,0]]", "output": "true" },
+            { "input": "num=2, prereq=[[1,0],[0,1]]", "output": "false" }
+          ]
+        },
+        {
+          "id": "w10q2",
+          "title": "Combination Sum",
+          "difficulty": "Medium",
+          "summary": "Find combinations sum to target.",
+          "description": "Return combinations that sum to target (reuse allowed).",
+          "examples": [
+            { "input": "c=[2,3,6,7], t=7", "output": "[[2,2,3],[7]]" },
+            { "input": "c=[2,3,5], t=8", "output": "[[2,2,2,2],[2,3,3],[3,5]]" }
+          ]
+        },
+        {
+          "id": "w10q3",
+          "title": "House Robber",
+          "difficulty": "Medium",
+          "summary": "Max sum without adjacent.",
+          "description": "Return max amount you can rob without adjacent houses.",
+          "examples": [
+            { "input": "[1,2,3,1]", "output": "4" },
+            { "input": "[2,7,9,3,1]", "output": "12" }
+          ]
+        },
+        {
+          "id": "w10q4",
+          "title": "Unique Paths",
+          "difficulty": "Medium",
+          "summary": "Count grid paths.",
+          "description": "Return number of unique paths in m x n grid.",
+          "examples": [
+            { "input": "m=3, n=7", "output": "28" },
+            { "input": "m=3, n=2", "output": "3" }
+          ]
+        },
+        {
+          "id": "w10q5",
+          "title": "Find Minimum in Rotated Array",
+          "difficulty": "Medium",
+          "summary": "Find min in rotated sorted array.",
+          "description": "Return minimum element.",
+          "examples": [
+            { "input": "[3,4,5,1,2]", "output": "1" },
+            { "input": "[4,5,6,7,0,1,2]", "output": "0" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week11",
+      "title": "Week 11",
+      "summary": "Medium-heavy practice",
+      "questions": [
+        {
+          "id": "w11q1",
+          "title": "Longest Common Subsequence",
+          "difficulty": "Medium",
+          "summary": "Find LCS length.",
+          "description": "Return length of longest common subsequence.",
+          "examples": [
+            { "input": "text1=\"abcde\", text2=\"ace\"", "output": "3" },
+            { "input": "text1=\"abc\", text2=\"abc\"", "output": "3" }
+          ]
+        },
+        {
+          "id": "w11q2",
+          "title": "Jump Game",
+          "difficulty": "Medium",
+          "summary": "Check if you can reach last index.",
+          "description": "Return true if you can reach the last index.",
+          "examples": [
+            { "input": "[2,3,1,1,4]", "output": "true" },
+            { "input": "[3,2,1,0,4]", "output": "false" }
+          ]
+        },
+        {
+          "id": "w11q3",
+          "title": "Add Two Numbers",
+          "difficulty": "Medium",
+          "summary": "Add numbers as linked list.",
+          "description": "Return sum of two numbers represented as linked lists.",
+          "examples": [
+            { "input": "2->4->3 + 5->6->4", "output": "7->0->8" },
+            { "input": "0 + 0", "output": "0" }
+          ]
+        },
+        {
+          "id": "w11q4",
+          "title": "Spiral Matrix",
+          "difficulty": "Medium",
+          "summary": "Print spiral order.",
+          "description": "Return elements of matrix in spiral order.",
+          "examples": [
+            { "input": "[[1,2,3],[4,5,6],[7,8,9]]", "output": "[1,2,3,6,9,8,7,4,5]" },
+            { "input": "[[1,2],[3,4]]", "output": "[1,2,4,3]" }
+          ]
+        },
+        {
+          "id": "w11q5",
+          "title": "Word Search",
+          "difficulty": "Medium",
+          "summary": "Find word in board.",
+          "description": "Return true if word exists in board.",
+          "examples": [
+            { "input": "board=[['A','B'],['C','D']], word=\"ABCD\"", "output": "false" },
+            { "input": "board=[['A','B'],['C','D']], word=\"AB\"", "output": "true" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week12",
+      "title": "Week 12",
+      "summary": "Medium mix",
+      "questions": [
+        {
+          "id": "w12q1",
+          "title": "Meeting Rooms",
+          "difficulty": "Medium",
+          "summary": "Check meeting conflicts.",
+          "description": "Return true if person can attend all meetings.",
+          "examples": [
+            { "input": "[[0,30],[5,10],[15,20]]", "output": "false" },
+            { "input": "[[7,10],[2,4]]", "output": "true" }
+          ]
+        },
+        {
+          "id": "w12q2",
+          "title": "LRU Cache",
+          "difficulty": "Medium",
+          "summary": "Design LRU cache.",
+          "description": "Implement LRU cache with get/put operations.",
+          "examples": [
+            { "input": "put(1,1), put(2,2), get(1)", "output": "1" },
+            { "input": "put(3,3), get(2)", "output": "-1" }
+          ]
+        },
+        {
+          "id": "w12q3",
+          "title": "Pacific Atlantic Water Flow",
+          "difficulty": "Medium",
+          "summary": "Find cells that reach both oceans.",
+          "description": "Return coordinates that can reach both oceans.",
+          "examples": [
+            { "input": "heights=[[1,2],[3,4]]", "output": "[[0,1],[1,0],[1,1]]" },
+            { "input": "heights=[[1]]", "output": "[[0,0]]" }
+          ]
+        },
+        {
+          "id": "w12q4",
+          "title": "Decode Ways",
+          "difficulty": "Medium",
+          "summary": "Count number of decodings.",
+          "description": "Return number of ways to decode a digit string.",
+          "examples": [
+            { "input": "\"12\"", "output": "2" },
+            { "input": "\"06\"", "output": "0" }
+          ]
+        },
+        {
+          "id": "w12q5",
+          "title": "Max Subarray",
+          "difficulty": "Medium",
+          "summary": "Find max subarray sum.",
+          "description": "Return largest sum of contiguous subarray.",
+          "examples": [
+            { "input": "[-2,1,-3,4,-1,2,1,-5,4]", "output": "6" },
+            { "input": "[1]", "output": "1" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week13",
+      "title": "Week 13",
+      "summary": "Medium to hard",
+      "questions": [
+        {
+          "id": "w13q1",
+          "title": "Word Ladder",
+          "difficulty": "Hard",
+          "summary": "Shortest transformation sequence.",
+          "description": "Return length of shortest transformation from begin to end word.",
+          "examples": [
+            { "input": "begin=\"hit\", end=\"cog\"", "output": "5" },
+            { "input": "begin=\"hit\", end=\"hot\"", "output": "2" }
+          ]
+        },
+        {
+          "id": "w13q2",
+          "title": "Median of Two Sorted Arrays",
+          "difficulty": "Hard",
+          "summary": "Find median of two arrays.",
+          "description": "Return median of two sorted arrays.",
+          "examples": [
+            { "input": "nums1=[1,3], nums2=[2]", "output": "2" },
+            { "input": "nums1=[1,2], nums2=[3,4]", "output": "2.5" }
+          ]
+        },
+        {
+          "id": "w13q3",
+          "title": "Trapping Rain Water",
+          "difficulty": "Hard",
+          "summary": "Calculate trapped water.",
+          "description": "Return total trapped rain water.",
+          "examples": [
+            { "input": "[0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6" },
+            { "input": "[4,2,0,3,2,5]", "output": "9" }
+          ]
+        },
+        {
+          "id": "w13q4",
+          "title": "Minimum Window Substring",
+          "difficulty": "Hard",
+          "summary": "Smallest window containing all chars.",
+          "description": "Return smallest substring of s containing all chars of t.",
+          "examples": [
+            { "input": "s=\"ADOBECODEBANC\", t=\"ABC\"", "output": "\"BANC\"" },
+            { "input": "s=\"a\", t=\"a\"", "output": "\"a\"" }
+          ]
+        },
+        {
+          "id": "w13q5",
+          "title": "Serialize and Deserialize Binary Tree",
+          "difficulty": "Hard",
+          "summary": "Serialize and deserialize tree.",
+          "description": "Design algorithm to serialize and deserialize binary tree.",
+          "examples": [
+            { "input": "[1,2,3,null,null,4,5]", "output": "Serialized then restored tree" },
+            { "input": "[]", "output": "[]" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week14",
+      "title": "Week 14",
+      "summary": "Hard practice",
+      "questions": [
+        {
+          "id": "w14q1",
+          "title": "Regular Expression Matching",
+          "difficulty": "Hard",
+          "summary": "Implement regex with . and *.",
+          "description": "Return true if the pattern matches the string.",
+          "examples": [
+            { "input": "s=\"aa\", p=\"a\"", "output": "false" },
+            { "input": "s=\"aa\", p=\"a*\"", "output": "true" }
+          ]
+        },
+        {
+          "id": "w14q2",
+          "title": "Merge K Sorted Lists",
+          "difficulty": "Hard",
+          "summary": "Merge k sorted lists.",
+          "description": "Merge k sorted linked lists into one sorted list.",
+          "examples": [
+            { "input": "[[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]" },
+            { "input": "[]", "output": "[]" }
+          ]
+        },
+        {
+          "id": "w14q3",
+          "title": "Largest Rectangle in Histogram",
+          "difficulty": "Hard",
+          "summary": "Max rectangle area.",
+          "description": "Return largest rectangle area in histogram.",
+          "examples": [
+            { "input": "[2,1,5,6,2,3]", "output": "10" },
+            { "input": "[2,4]", "output": "4" }
+          ]
+        },
+        {
+          "id": "w14q4",
+          "title": "Word Search II",
+          "difficulty": "Hard",
+          "summary": "Find all words in board.",
+          "description": "Return all words in dictionary present in board.",
+          "examples": [
+            { "input": "board=[[a,b],[c,d]], words=[\"ab\",\"abcd\"]", "output": "[\"ab\"]" },
+            { "input": "board=[[a]], words=[\"a\"]", "output": "[\"a\"]" }
+          ]
+        },
+        {
+          "id": "w14q5",
+          "title": "Minimum Cost Path",
+          "difficulty": "Hard",
+          "summary": "Find min cost path in grid.",
+          "description": "Return minimum cost path from top-left to bottom-right.",
+          "examples": [
+            { "input": "grid=[[1,3,1],[1,5,1],[4,2,1]]", "output": "7" },
+            { "input": "grid=[[1,2],[1,1]]", "output": "3" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week15",
+      "title": "Week 15",
+      "summary": "Hard and mixed",
+      "questions": [
+        {
+          "id": "w15q1",
+          "title": "Alien Dictionary",
+          "difficulty": "Hard",
+          "summary": "Find character order.",
+          "description": "Return character order from sorted alien words.",
+          "examples": [
+            { "input": "[\"wrt\",\"wrf\",\"er\",\"ett\",\"rftt\"]", "output": "\"wertf\"" },
+            { "input": "[\"z\",\"x\"]", "output": "\"zx\"" }
+          ]
+        },
+        {
+          "id": "w15q2",
+          "title": "Sliding Window Maximum",
+          "difficulty": "Hard",
+          "summary": "Max of each window.",
+          "description": "Return max in each sliding window of size k.",
+          "examples": [
+            { "input": "nums=[1,3,-1,-3,5,3,6,7], k=3", "output": "[3,3,5,5,6,7]" },
+            { "input": "nums=[1], k=1", "output": "[1]" }
+          ]
+        },
+        {
+          "id": "w15q3",
+          "title": "N-Queens",
+          "difficulty": "Hard",
+          "summary": "Place queens on chessboard.",
+          "description": "Return all distinct solutions to N-Queens.",
+          "examples": [
+            { "input": "n=4", "output": "2 solutions" },
+            { "input": "n=1", "output": "[[\"Q\"]]" }
+          ]
+        },
+        {
+          "id": "w15q4",
+          "title": "Burst Balloons",
+          "difficulty": "Hard",
+          "summary": "Max coins from bursting.",
+          "description": "Return max coins you can collect.",
+          "examples": [
+            { "input": "[3,1,5,8]", "output": "167" },
+            { "input": "[1,5]", "output": "10" }
+          ]
+        },
+        {
+          "id": "w15q5",
+          "title": "Shortest Path in Graph",
+          "difficulty": "Hard",
+          "summary": "Find shortest path length.",
+          "description": "Return shortest path length between nodes in weighted graph.",
+          "examples": [
+            { "input": "edges=[[0,1,2],[1,2,1]], start=0, end=2", "output": "3" },
+            { "input": "edges=[[0,1,5]], start=0, end=1", "output": "5" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week16",
+      "title": "Week 16",
+      "summary": "Hard focus",
+      "questions": [
+        {
+          "id": "w16q1",
+          "title": "Graph Clone",
+          "difficulty": "Hard",
+          "summary": "Clone an undirected graph.",
+          "description": "Return deep copy of a connected graph.",
+          "examples": [
+            { "input": "1--2", "output": "Cloned graph" },
+            { "input": "[]", "output": "[]" }
+          ]
+        },
+        {
+          "id": "w16q2",
+          "title": "Palindrome Pairs",
+          "difficulty": "Hard",
+          "summary": "Find palindrome pairs.",
+          "description": "Return index pairs where concatenation is palindrome.",
+          "examples": [
+            { "input": "[\"abcd\",\"dcba\",\"lls\",\"s\",\"sssll\"]", "output": "[[0,1],[1,0],[3,2],[2,4]]" },
+            { "input": "[\"a\",\"\"]", "output": "[[0,1],[1,0]]" }
+          ]
+        },
+        {
+          "id": "w16q3",
+          "title": "Minimum Edit Distance",
+          "difficulty": "Hard",
+          "summary": "Find edit distance.",
+          "description": "Return min number of operations to convert word1 to word2.",
+          "examples": [
+            { "input": "\"horse\", \"ros\"", "output": "3" },
+            { "input": "\"intention\", \"execution\"", "output": "5" }
+          ]
+        },
+        {
+          "id": "w16q4",
+          "title": "Critical Connections",
+          "difficulty": "Hard",
+          "summary": "Find bridges in graph.",
+          "description": "Return all critical connections in a network.",
+          "examples": [
+            { "input": "n=4, edges=[[0,1],[1,2],[2,0],[1,3]]", "output": "[[1,3]]" },
+            { "input": "n=2, edges=[[0,1]]", "output": "[[0,1]]" }
+          ]
+        },
+        {
+          "id": "w16q5",
+          "title": "Kth Smallest in BST",
+          "difficulty": "Medium",
+          "summary": "Find kth smallest value.",
+          "description": "Return kth smallest element in BST.",
+          "examples": [
+            { "input": "root=[3,1,4,null,2], k=1", "output": "1" },
+            { "input": "root=[5,3,6,2,4,null,null,1], k=3", "output": "3" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week17",
+      "title": "Week 17",
+      "summary": "Hard set",
+      "questions": [
+        {
+          "id": "w17q1",
+          "title": "Sudoku Solver",
+          "difficulty": "Hard",
+          "summary": "Solve Sudoku.",
+          "description": "Fill the board with valid numbers.",
+          "examples": [
+            { "input": "partial board", "output": "solved board" },
+            { "input": "valid board", "output": "same board" }
+          ]
+        },
+        {
+          "id": "w17q2",
+          "title": "Word Break II",
+          "difficulty": "Hard",
+          "summary": "Return all sentences.",
+          "description": "Return all possible sentences from word dictionary.",
+          "examples": [
+            { "input": "s=\"catsanddog\"", "output": "[\"cats and dog\",\"cat sand dog\"]" },
+            { "input": "s=\"pineapplepenapple\"", "output": "3 sentences" }
+          ]
+        },
+        {
+          "id": "w17q3",
+          "title": "Minimum Path Sum II",
+          "difficulty": "Hard",
+          "summary": "Minimum sum with obstacles.",
+          "description": "Return minimum path sum when obstacles exist.",
+          "examples": [
+            { "input": "grid=[[1,3,1],[1,5,1],[4,2,1]]", "output": "7" },
+            { "input": "grid=[[1,2],[1,1]]", "output": "3" }
+          ]
+        },
+        {
+          "id": "w17q4",
+          "title": "Maximal Rectangle",
+          "difficulty": "Hard",
+          "summary": "Largest rectangle of 1s.",
+          "description": "Return area of largest rectangle in binary matrix.",
+          "examples": [
+            { "input": "[[1,0,1,0,0],[1,0,1,1,1],[1,1,1,1,1]]", "output": "6" },
+            { "input": "[[0]]", "output": "0" }
+          ]
+        },
+        {
+          "id": "w17q5",
+          "title": "Shortest Common Supersequence",
+          "difficulty": "Hard",
+          "summary": "Find shortest supersequence.",
+          "description": "Return shortest string that has both strings as subsequence.",
+          "examples": [
+            { "input": "str1=\"abac\", str2=\"cab\"", "output": "\"cabac\"" },
+            { "input": "str1=\"a\", str2=\"b\"", "output": "\"ab\"" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week18",
+      "title": "Week 18",
+      "summary": "Hard mixed set",
+      "questions": [
+        {
+          "id": "w18q1",
+          "title": "Minimum Number of Refueling Stops",
+          "difficulty": "Hard",
+          "summary": "Min refueling stops.",
+          "description": "Return minimum refueling stops to reach target.",
+          "examples": [
+            { "input": "target=100, start=10, stations=[[10,60],[20,30],[30,30],[60,40]]", "output": "2" },
+            { "input": "target=1, start=1, stations=[]", "output": "0" }
+          ]
+        },
+        {
+          "id": "w18q2",
+          "title": "Median Finder",
+          "difficulty": "Hard",
+          "summary": "Find median in data stream.",
+          "description": "Design a data structure to find median.",
+          "examples": [
+            { "input": "add 1, add 2, find", "output": "1.5" },
+            { "input": "add 3, find", "output": "2" }
+          ]
+        },
+        {
+          "id": "w18q3",
+          "title": "Serialize Graph",
+          "difficulty": "Hard",
+          "summary": "Serialize and deserialize graph.",
+          "description": "Design a method to serialize and deserialize a graph.",
+          "examples": [
+            { "input": "graph with 3 nodes", "output": "serialized string" },
+            { "input": "serialized string", "output": "graph" }
+          ]
+        },
+        {
+          "id": "w18q4",
+          "title": "Minimum Insertions to Palindrome",
+          "difficulty": "Hard",
+          "summary": "Min insertions to make palindrome.",
+          "description": "Return min insertions needed.",
+          "examples": [
+            { "input": "\"mbadm\"", "output": "2" },
+            { "input": "\"zzazz\"", "output": "0" }
+          ]
+        },
+        {
+          "id": "w18q5",
+          "title": "Egg Dropping",
+          "difficulty": "Hard",
+          "summary": "Minimum moves to find critical floor.",
+          "description": "Return minimum moves with k eggs and n floors.",
+          "examples": [
+            { "input": "k=1, n=2", "output": "2" },
+            { "input": "k=2, n=6", "output": "3" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week19",
+      "title": "Week 19",
+      "summary": "Hard algorithms",
+      "questions": [
+        {
+          "id": "w19q1",
+          "title": "Max Flow",
+          "difficulty": "Hard",
+          "summary": "Compute max flow in a network.",
+          "description": "Return maximum flow between source and sink.",
+          "examples": [
+            { "input": "graph with capacities", "output": "max flow" },
+            { "input": "graph small", "output": "max flow value" }
+          ]
+        },
+        {
+          "id": "w19q2",
+          "title": "Minimum Spanning Tree",
+          "difficulty": "Medium",
+          "summary": "Find MST weight.",
+          "description": "Return total weight of MST.",
+          "examples": [
+            { "input": "edges=[[0,1,4],[1,2,3]]", "output": "7" },
+            { "input": "edges=[[0,1,1],[1,2,2],[0,2,3]]", "output": "3" }
+          ]
+        },
+        {
+          "id": "w19q3",
+          "title": "Kth Largest in Stream",
+          "difficulty": "Medium",
+          "summary": "Find kth largest on each insert.",
+          "description": "Design class to return kth largest.",
+          "examples": [
+            { "input": "k=3, nums=[4,5,8,2], add 3", "output": "4" },
+            { "input": "add 10", "output": "5" }
+          ]
+        },
+        {
+          "id": "w19q4",
+          "title": "Longest Path in DAG",
+          "difficulty": "Hard",
+          "summary": "Find longest path in DAG.",
+          "description": "Return longest path length in DAG.",
+          "examples": [
+            { "input": "edges=[[0,1],[1,2],[0,2]]", "output": "2" },
+            { "input": "edges=[[0,1]]", "output": "1" }
+          ]
+        },
+        {
+          "id": "w19q5",
+          "title": "Minimum Cuts",
+          "difficulty": "Hard",
+          "summary": "Minimum cuts for palindrome partition.",
+          "description": "Return minimum cuts needed for palindrome partitioning.",
+          "examples": [
+            { "input": "\"aab\"", "output": "1" },
+            { "input": "\"a\"", "output": "0" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week20",
+      "title": "Week 20",
+      "summary": "Final hard mix",
+      "questions": [
+        {
+          "id": "w20q1",
+          "title": "Minimum Window Subsequence",
+          "difficulty": "Hard",
+          "summary": "Smallest window for subsequence.",
+          "description": "Return shortest substring of S containing T as subsequence.",
+          "examples": [
+            { "input": "S=\"abcdebdde\", T=\"bde\"", "output": "\"bcde\"" },
+            { "input": "S=\"jmeqksfrsdcmsiwvaovztaqenprpvnbstl\", T=\"u\"", "output": "\"\"" }
+          ]
+        },
+        {
+          "id": "w20q2",
+          "title": "Max Points on Line",
+          "difficulty": "Hard",
+          "summary": "Max collinear points.",
+          "description": "Return maximum points on a straight line.",
+          "examples": [
+            { "input": "points=[[1,1],[2,2],[3,3]]", "output": "3" },
+            { "input": "points=[[1,1],[3,2],[5,3],[4,1]]", "output": "2" }
+          ]
+        },
+        {
+          "id": "w20q3",
+          "title": "Edit Distance",
+          "difficulty": "Hard",
+          "summary": "Minimum edit distance.",
+          "description": "Return min operations to convert word1 to word2.",
+          "examples": [
+            { "input": "\"horse\", \"ros\"", "output": "3" },
+            { "input": "\"intention\", \"execution\"", "output": "5" }
+          ]
+        },
+        {
+          "id": "w20q4",
+          "title": "Largest BST Subtree",
+          "difficulty": "Hard",
+          "summary": "Find largest BST in tree.",
+          "description": "Return size of largest BST subtree.",
+          "examples": [
+            { "input": "[10,5,15,1,8,null,7]", "output": "3" },
+            { "input": "[2,1,3]", "output": "3" }
+          ]
+        },
+        {
+          "id": "w20q5",
+          "title": "Minimum Difficulty of Job Schedule",
+          "difficulty": "Hard",
+          "summary": "Schedule jobs for minimum difficulty.",
+          "description": "Return minimum difficulty to schedule jobs in d days.",
+          "examples": [
+            { "input": "job=[6,5,4,3,2,1], d=2", "output": "7" },
+            { "input": "job=[9,9,9], d=4", "output": "-1" }
+          ]
+        }
+      ]
+    }
+  ]
+}
