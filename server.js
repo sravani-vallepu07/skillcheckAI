@@ -311,39 +311,34 @@ app.post("/api/github/push", async (req, res) => {
   }
 });
 
-// Whisper API Transcription (using OpenAI API)
+// Hugo Face Transcription (using HF Inference API via Direct Axios)
 app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No audio file provided" });
-
   const inputPath = path.resolve(req.file.path);
 
   try {
-    const formData = new FormData();
-    // Append the uploaded audio file securely
-    formData.append("file", fs.createReadStream(inputPath));
-    // The whisper model name
-    formData.append("model", "whisper-1");
-    // (Optional) Enforce English or remove this to auto-detect
-    // formData.append("language", "en"); 
+    const audioData = fs.readFileSync(inputPath);
+    const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
 
-    const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", formData, {
-      headers: {
-        ...formData.getHeaders(),
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-    });
+    if (!token) throw new Error("HUGGING_FACE_API_KEY is missing in environment.");
 
-    // OpenAI returns { "text": "the transcribed text" }
+    const response = await axios.post(
+      "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3-turbo",
+      audioData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/octet-stream",
+        },
+      }
+    );
+
     res.json({ transcript: response.data.text.trim() });
-
-    // Optional: Clean up the uploaded audio file from your server after successful conversion
-    if (fs.existsSync(inputPath)) {
-      fs.unlinkSync(inputPath);
-    }
-
+    if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   } catch (err) {
-    console.error("OpenAI API Error:", err.response ? err.response.data : err.message);
-    res.status(500).json({ error: "Failed to transcribe audio using OpenAI API." });
+    console.error("Transcription Error:", err.response?.data || err.message);
+    res.status(500).json({ error: (err.response?.data?.error || err.message) });
+    if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   }
 });
 

@@ -142,23 +142,27 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No audio file provided" });
     const inputPath = path.resolve(req.file.path);
     try {
-        console.log("Transcribe Request Received - File Size:", req.file ? req.file.size : "NO FILE");
         const audioBuffer = fs.readFileSync(inputPath);
-        console.log("Audio Buffer Read - Bytes:", audioBuffer.length);
+        const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
 
-        // Use HfInference client with the newest/fastest whisper model
-        const result = await getHf().automaticSpeechRecognition({
-            model: "openai/whisper-large-v3-turbo",
-            data: audioBuffer,
-        });
+        if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-        console.log("Transcription Response Received - Text Length:", result.text ? result.text.length : "NO TEXT");
-        res.json({ transcript: result.text.trim() });
+        const response = await axios.post(
+            "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3-turbo",
+            audioBuffer,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/octet-stream",
+                },
+            }
+        );
+
+        res.json({ transcript: response.data.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("Transcription Error - Details:", err.message);
-        const errorMsg = err.message || "Transcription failed";
-        res.status(500).json({ error: errorMsg });
+        console.error("Transcription Error:", err.response?.data || err.message);
+        res.status(500).json({ error: (err.response?.data?.error || err.message) });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
 });
