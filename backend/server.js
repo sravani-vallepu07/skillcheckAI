@@ -148,30 +148,35 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No audio file provided" });
     const inputPath = path.resolve(req.file.path);
     try {
-        const audioBuffer = fs.readFileSync(inputPath);
         const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
-
         if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-        console.log("--- TRANSCRIPTION ATTEMPT V5 ---");
+        // Use FormData for the OpenAI-compatible endpoint
+        const formData = new FormData();
+        formData.append("file", fs.createReadStream(inputPath));
+        formData.append("model", "openai/whisper-large-v3-turbo");
+
+        console.log("--- TRANSCRIPTION ATTEMPT V6 (OpenAI-Compatible) ---");
         const response = await axios.post(
-            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
-            audioBuffer,
+            "https://api-inference.huggingface.co/v1/audio/transcriptions",
+            formData,
             {
                 headers: {
+                    ...formData.getHeaders(),
                     "Authorization": `Bearer ${token}`,
-                    "Content-Type": "audio/webm",
                 },
             }
         );
 
-        console.log("HF V5 Status:", response.status);
-        const transcript = response.data.text || response.data.transcript || "";
-        res.json({ transcript: transcript.trim(), _v: "v5" });
+        console.log("HF V6 Status:", response.status);
+        // OpenAI-style response is { text: "..." }
+        const transcript = response.data.text || "";
+        res.json({ transcript: transcript.trim(), _v: "v6" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("V5 Error:", err.response?.data || err.message);
-        res.status(500).json({ error: (err.response?.data?.error || err.message), _v: "v5" });
+        const detail = err.response?.data || err.message;
+        console.error("V6 Error:", detail);
+        res.status(500).json({ error: (detail.error?.message || detail.error || err.message), _v: "v6" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
 });
@@ -183,5 +188,5 @@ app.get("*", (req, res) => {
 
 // ── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-    console.log(`🚀 SkillCheckAI [V5] server running at http://localhost:${PORT}`);
+    console.log(`🚀 SkillCheckAI [V6] server running at http://localhost:${PORT}`);
 });

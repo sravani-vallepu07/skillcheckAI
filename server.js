@@ -311,7 +311,7 @@ app.post("/api/github/push", async (req, res) => {
   }
 });
 
-// Hugo Face Transcription V5 (Direct Axios)
+// Hugo Face Transcription V6 (OpenAI-Compatible)
 const ROOT_UPLOADS = path.join(__dirname, "uploads/");
 if (!fs.existsSync(ROOT_UPLOADS)) fs.mkdirSync(ROOT_UPLOADS, { recursive: true });
 const upload_root = multer({ dest: ROOT_UPLOADS });
@@ -321,34 +321,37 @@ app.post("/api/transcribe", upload_root.single("audio"), async (req, res) => {
   const inputPath = path.resolve(req.file.path);
 
   try {
-    const audioData = fs.readFileSync(inputPath);
     const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
+    if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-    if (!token) throw new Error("HUGGING_FACE_API_KEY is missing in environment.");
+    const formData = new FormData();
+    formData.append("file", fs.createReadStream(inputPath));
+    formData.append("model", "openai/whisper-large-v3-turbo");
 
-    console.log("--- TRANSCRIPTION ATTEMPT V5 (ROOT) ---");
+    console.log("--- TRANSCRIPTION ATTEMPT V6 (ROOT) ---");
     const response = await axios.post(
-      "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
-      audioData,
+      "https://api-inference.huggingface.co/v1/audio/transcriptions",
+      formData,
       {
         headers: {
+          ...formData.getHeaders(),
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "audio/webm",
         },
       }
     );
 
-    console.log("HF V5 Status:", response.status);
-    const transcript = response.data.text || response.data.transcript || "";
-    res.json({ transcript: transcript.trim(), _v: "v5" });
+    console.log("HF V6 Status:", response.status);
+    const transcript = response.data.text || "";
+    res.json({ transcript: transcript.trim(), _v: "v6" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   } catch (err) {
-    console.error("V5 Error (Root):", err.response?.data || err.message);
-    res.status(500).json({ error: (err.response?.data?.error || err.message), _v: "v5" });
+    const detail = err.response?.data || err.message;
+    console.error("V6 Error (Root):", detail);
+    res.status(500).json({ error: (detail.error?.message || detail.error || err.message), _v: "v6" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server [V5] running at http://localhost:${PORT}`);
+  console.log(`Server [V6] running at http://localhost:${PORT}`);
 });
