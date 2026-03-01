@@ -117,16 +117,29 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     const inputPath = path.resolve(req.file.path);
     try {
         const formData = new FormData();
-        formData.append("file", fs.createReadStream(inputPath));
-        formData.append("model", "whisper-1");
-        const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", formData, {
-            headers: { ...formData.getHeaders(), Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+        // Use the original filename or default to .webm if missing
+        const filename = req.file.originalname || "audio.webm";
+        const contentType = req.file.mimetype || "audio/webm";
+
+        formData.append("file", fs.createReadStream(inputPath), {
+            filename: filename,
+            contentType: contentType,
         });
+        formData.append("model", "whisper-1");
+
+        const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", formData, {
+            headers: {
+                ...formData.getHeaders(),
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+            },
+        });
+
         res.json({ transcript: response.data.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("Whisper error:", err.response?.data || err.message);
-        res.status(500).json({ error: "Failed to transcribe audio." });
+        console.error("Whisper error detail:", err.response?.data || err.message);
+        res.status(500).json({ error: "Failed to transcribe audio. Check server logs." });
+        if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
 });
 

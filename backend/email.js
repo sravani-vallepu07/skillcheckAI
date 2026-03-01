@@ -16,7 +16,7 @@ async function sendWelcomeEmail(to, name) {
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
-      subject: "Welcome to SkillCheckAI! 🎉",
+      subject: "Welcome to SkillCheckAI!",
       html: `
         <div style="font-family:'Inter',system-ui,sans-serif;background:#f8fafc;padding:0;margin:0;">
           <div style="max-width:600px;margin:0 auto;background:#f8fafc;padding:48px 20px;">
@@ -67,7 +67,7 @@ async function sendPasswordResetEmail(to, token) {
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
-      subject: "SkillCheckAI – Reset Your Password 🔐",
+      subject: "SkillCheckAI – Reset Your Password",
       html: `
         <div style="font-family:'Inter',system-ui,sans-serif;background:#f8fafc;padding:0;margin:0;">
           <div style="max-width:600px;margin:0 auto;background:#f8fafc;padding:48px 20px;">
