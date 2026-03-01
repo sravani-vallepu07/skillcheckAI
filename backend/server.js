@@ -153,7 +153,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/octet-stream",
+                    "Content-Type": "audio/webm",
                 },
             }
         );
