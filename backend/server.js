@@ -147,18 +147,21 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
         if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
+        console.log("--- TRANSCRIPTION ATTEMPT V3 (audio/webm) ---");
         const response = await axios.post(
-            "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3-turbo",
+            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
             audioBuffer,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "audio/webm",
                 },
             }
         );
 
-        res.json({ transcript: response.data.text.trim() });
+        console.log("Response from HF:", response.status);
+        const transcript = response.data.text || response.data.transcript || "";
+        res.json({ transcript: transcript.trim(), _v: "v3" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
         console.error("Transcription Error:", err.response?.data || err.message);
@@ -174,5 +177,5 @@ app.get("*", (req, res) => {
 
 // ── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-    console.log(`🚀 SkillCheckAI server running at http://localhost:${PORT}`);
+    console.log(`🚀 SkillCheckAI [V3] server running at http://localhost:${PORT}`);
 });
