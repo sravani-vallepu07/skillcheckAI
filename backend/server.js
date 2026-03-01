@@ -125,16 +125,21 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
             filename: filename,
             contentType: contentType,
         });
-        formData.append("model", "whisper-1");
+        // formData.append("model", "whisper-1");
 
-        const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", formData, {
-            headers: {
-                ...formData.getHeaders(),
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-            },
-        });
+        // Use Hugging Face Inference API
+        const hfResponse = await axios.post(
+            "https://api-inference.huggingface.co/models/openai/whisper-large-v3",
+            fs.readFileSync(inputPath),
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+                    "Content-Type": contentType,
+                },
+            }
+        );
 
-        res.json({ transcript: response.data.text.trim() });
+        res.json({ transcript: hfResponse.data.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
         const errorMsg = err.response?.data?.error?.message || err.message || "Transcription failed";
