@@ -233,26 +233,35 @@ function App() {
     // Microphone setup
     useEffect(() => {
         if (!navigator.mediaDevices?.getUserMedia) {
-            setRecordStatus("MediaRecorder not supported.");
+            setRecordStatus("Recording not supported in this browser.");
             return;
         }
         navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-            const mediaRecorder = new MediaRecorder(stream);
+            const options = { mimeType: MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4" };
+            const mediaRecorder = new MediaRecorder(stream, options);
+
             mediaRecorder.ondataavailable = (e) => {
-                if (e.data.size > 0) audioChunksRef.current.push(e.data);
+                if (e.data.size > 0) {
+                    audioChunksRef.current.push(e.data);
+                }
             };
+
             mediaRecorder.onstart = () => {
                 setIsRecording(true);
-                setRecordStatus("Recording...");
+                setRecordStatus("Recording your explanation...");
                 audioChunksRef.current = [];
             };
+
             mediaRecorder.onstop = async () => {
                 setIsRecording(false);
                 setIsTranscribing(true);
-                setRecordStatus("Transcribing with Whisper...");
-                const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+                setRecordStatus("Transcribing...");
+
+                const blobType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
+                const audioBlob = new Blob(audioChunksRef.current, { type: blobType });
                 const formData = new FormData();
-                formData.append("audio", audioBlob, "audio.webm");
+                formData.append("audio", audioBlob, blobType.includes("webm") ? "audio.webm" : "audio.mp4");
+
                 try {
                     const res = await fetch("/api/transcribe", { method: "POST", body: formData });
                     const data = await res.json();
@@ -260,15 +269,19 @@ function App() {
                         setStudentTranscript(data.transcript);
                         setRecordStatus("Transcription complete.");
                     } else {
-                        setRecordStatus("Transcription failed.");
+                        throw new Error(data.error || "No transcript returned");
                     }
-                } catch (_) {
-                    setRecordStatus("Transcription error.");
+                } catch (err) {
+                    console.error("Transcription Error:", err);
+                    setRecordStatus("Failed to transcribe. Please try again or type manually.");
                 }
                 setIsTranscribing(false);
             };
             mediaRecorderRef.current = mediaRecorder;
-        }).catch(() => { setRecordStatus("Microphone access denied."); });
+        }).catch((err) => {
+            console.error("Mic Access Error:", err);
+            setRecordStatus("Microphone access denied.");
+        });
     }, []);
 
     // Countdown timer
@@ -280,7 +293,7 @@ function App() {
                 setCodeRemaining(0);
                 setCodeDeadline(null);
                 setCodeExpired(true);
-                alert("⏰ Time's up! You have reached the 30-minute limit. Please submit your work now.");
+                alert("Time's up! You have reached the 30-minute limit. Please submit your work now.");
                 return;
             }
             setCodeRemaining(remaining);
@@ -470,7 +483,7 @@ function App() {
             setStudentStatus(err.error || "Unable to submit.");
             return;
         }
-        setStudentStatus("Submitted to faculty successfully! 🎉");
+        setStudentStatus("Submitted to faculty successfully!");
     }
 
     // ── Faculty ───────────────────────────────────────────────────────────────
@@ -548,10 +561,10 @@ function App() {
                                     onBlur={() => checkEmailExists(loginEmail, loginRole)}
                                 />
                                 {emailExists === false && (
-                                    <span className="input-hint" style={{ color: "var(--accent)" }}>✨ New here? We'll create your account.</span>
+                                    <span className="input-hint" style={{ color: "var(--accent)" }}>New here? We'll create your account.</span>
                                 )}
                                 {emailExists === true && (
-                                    <span className="input-hint" style={{ color: "var(--muted)" }}>👋 Welcome back! Please enter your password.</span>
+                                    <span className="input-hint" style={{ color: "var(--muted)" }}>Welcome back! Please enter your password.</span>
                                 )}
                             </label>
 
@@ -800,22 +813,22 @@ function App() {
                                             />
                                             {!isCodingCompleted && (
                                                 <button className="primary build" type="button" onClick={() => setIsCodingCompleted(true)} disabled={codeExpired}>
-                                                    ✅ Complete Code &amp; Report
+                                                    Complete Code &amp; Report
                                                 </button>
                                             )}
                                             {isCodingCompleted && (
-                                                <div className="notice success" style={{ textAlign: "center" }}>✅ Code & report locked</div>
+                                                <div className="notice success" style={{ textAlign: "center" }}>Code & report locked</div>
                                             )}
                                         </div>
 
                                         {/* Column 3: Voice + GitHub */}
                                         <div className="code-column">
-                                            <h3>🎙 Voice &amp; GitHub</h3>
+                                            <h3>Voice &amp; GitHub</h3>
                                             {isCodingCompleted ? (
                                                 <>
                                                     <div className="record-controls">
                                                         <button className="primary" type="button" onClick={startRecord} disabled={isRecording || isTranscribing}>
-                                                            {isRecording ? "🔴 Recording..." : "▶ Start Rec"}
+                                                            {isRecording ? "Recording..." : "Start Recording"}
                                                         </button>
                                                         <button className="ghost" type="button" onClick={stopRecord} disabled={!isRecording}>Stop</button>
                                                         <span className="status">{recordStatus}</span>
@@ -828,7 +841,7 @@ function App() {
                                                     />
 
                                                     <div style={{ marginTop: "auto", display: "grid", gap: "10px" }}>
-                                                        <h3 style={{ margin: 0, fontSize: "14px" }}>🐙 GitHub Push</h3>
+                                                        <h3 style={{ margin: 0, fontSize: "14px" }}>GitHub Push</h3>
                                                         {githubConnected ? (
                                                             <>
                                                                 <div className="notice success">Connected as {githubUsername || "GitHub User"}</div>
@@ -844,14 +857,13 @@ function App() {
                                                             <input type="url" readOnly placeholder="Link will appear after push..." value={studentGithubUrl} />
                                                         </label>
                                                         <button className="primary build" type="button" onClick={submitStudentWork}>
-                                                            📤 Submit All to Faculty
+                                                            Submit All to Faculty
                                                         </button>
                                                     </div>
                                                 </>
                                             ) : (
                                                 <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", color: "var(--muted)", padding: "20px" }}>
                                                     <div>
-                                                        <div style={{ fontSize: "36px", marginBottom: "12px" }}>🔒</div>
                                                         <p>Complete your Code &amp; Report first to unlock Voice Explanation.</p>
                                                     </div>
                                                 </div>
@@ -860,7 +872,7 @@ function App() {
                                     </div>
 
                                     {studentStatus && (
-                                        <div className={`notice ${studentStatus.includes("successfully") || studentStatus.includes("✅") ? "success" : "warn"}`}>
+                                        <div className={`notice ${studentStatus.includes("successfully") ? "success" : "warn"}`}>
                                             {studentStatus}
                                         </div>
                                     )}
@@ -878,7 +890,7 @@ function App() {
                                 <h2>Faculty Dashboard</h2>
                                 <p className="input-hint">Viewing all student submissions – {session.email}</p>
                             </div>
-                            <span className="pill">📊 Review Submissions</span>
+                            <span className="pill">Review Submissions</span>
                         </div>
 
                         {/* Week selection */}
@@ -958,7 +970,7 @@ function App() {
                                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                                         <h3>{facultyQuestion.questionTitle}</h3>
                                         <span className="pill success">
-                                            ✅ {facultyQuestion.status || "submitted"}
+                                            {facultyQuestion.status || "submitted"}
                                         </span>
                                     </div>
 
@@ -976,14 +988,14 @@ function App() {
                                     </div>
 
                                     <div className="card light">
-                                        <h4 style={{ margin: "0 0 10px", color: "var(--text)" }}>💻 Code</h4>
+                                        <h4 style={{ margin: "0 0 10px", color: "var(--text)" }}>Code</h4>
                                         <pre className="example-card" style={{ margin: 0, overflowX: "auto" }}>
                                             {facultyQuestion.code || "No code submitted."}
                                         </pre>
                                     </div>
 
                                     <div className="card light">
-                                        <h4 style={{ margin: "0 0 10px", color: "var(--text)" }}>🎙 Voice Explanation Transcript</h4>
+                                        <h4 style={{ margin: "0 0 10px", color: "var(--text)" }}>Voice Explanation Transcript</h4>
                                         <p style={{ margin: 0, color: "var(--muted)", whiteSpace: "pre-wrap" }}>
                                             {facultyQuestion.transcript || "No transcript submitted."}
                                         </p>
