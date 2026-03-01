@@ -137,8 +137,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
         res.json({ transcript: response.data.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("Whisper error detail:", err.response?.data || err.message);
-        res.status(500).json({ error: "Failed to transcribe audio. Check server logs." });
+        const errorMsg = err.response?.data?.error?.message || err.message || "Transcription failed";
+        console.error("Whisper error detail:", errorMsg);
+        res.status(500).json({ error: errorMsg });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
 });

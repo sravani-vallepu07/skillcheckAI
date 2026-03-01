@@ -259,6 +259,13 @@ function App() {
 
                 const blobType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
                 const audioBlob = new Blob(audioChunksRef.current, { type: blobType });
+
+                if (audioBlob.size < 100) {
+                    setRecordStatus("Error: No audio captured. Check mic permissions.");
+                    setIsTranscribing(false);
+                    return;
+                }
+
                 const formData = new FormData();
                 formData.append("audio", audioBlob, blobType.includes("webm") ? "audio.webm" : "audio.mp4");
 
@@ -269,11 +276,11 @@ function App() {
                         setStudentTranscript(data.transcript);
                         setRecordStatus("Transcription complete.");
                     } else {
-                        throw new Error(data.error || "No transcript returned");
+                        throw new Error(data.error || "Server returned an empty response.");
                     }
                 } catch (err) {
                     console.error("Transcription Error:", err);
-                    setRecordStatus("Failed to transcribe. Please try again or type manually.");
+                    setRecordStatus("Error: " + (err.message || "Could not connect to server."));
                 }
                 setIsTranscribing(false);
             };
