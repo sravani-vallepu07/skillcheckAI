@@ -13,13 +13,26 @@ const { HfInference } = require("@huggingface/inference");
 let hf;
 function getHf() {
     if (!hf) {
-        if (!process.env.HUGGING_FACE_API_KEY) {
-            throw new Error("HUGGING_FACE_API_KEY is missing in environment variables.");
+        const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
+        console.log("Hugging Face Token Present:", !!token);
+        if (!token) {
+            throw new Error("HUGGING_FACE_API_KEY is missing in environment variables. Please add it to your Render dashboard.");
         }
-        hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
+        try {
+            hf = new HfInference(token);
+            console.log("Hugging Face client initialized successfully.");
+        } catch (e) {
+            console.error("Failed to initialize Hugging Face client:", e.message);
+            throw e;
+        }
     }
     return hf;
 }
+
+console.log("Server starting...");
+console.log("Check Env - PORT:", process.env.PORT);
+console.log("Check Env - MONGODB_URI:", process.env.MONGODB_URI ? "EXISTS" : "MISSING");
+console.log("Check Env - HUGGING_FACE_API_KEY:", process.env.HUGGING_FACE_API_KEY ? "EXISTS" : "MISSING");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -129,7 +142,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No audio file provided" });
     const inputPath = path.resolve(req.file.path);
     try {
+        console.log("Transcribe Request Received - File Size:", req.file ? req.file.size : "NO FILE");
         const audioBuffer = fs.readFileSync(inputPath);
+        console.log("Audio Buffer Read - Bytes:", audioBuffer.length);
 
         // Use HfInference client with the newest/fastest whisper model
         const result = await getHf().automaticSpeechRecognition({
@@ -137,10 +152,11 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
             data: audioBuffer,
         });
 
+        console.log("Transcription Response Received - Text Length:", result.text ? result.text.length : "NO TEXT");
         res.json({ transcript: result.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("Hugging Face error detail:", err.message);
+        console.error("Transcription Error - Details:", err.message);
         const errorMsg = err.message || "Transcription failed";
         res.status(500).json({ error: errorMsg });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
