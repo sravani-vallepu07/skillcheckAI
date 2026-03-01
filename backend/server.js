@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 const express = require("express");
 const path = require("path");
 const multer = require("multer");
@@ -8,7 +8,18 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { HfInference } = require("@huggingface/inference");
-const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
+
+// Initialize later inside the route or with a check
+let hf;
+function getHf() {
+    if (!hf) {
+        if (!process.env.HUGGING_FACE_API_KEY) {
+            throw new Error("HUGGING_FACE_API_KEY is missing in environment variables.");
+        }
+        hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
+    }
+    return hf;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -121,7 +132,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
         const audioBuffer = fs.readFileSync(inputPath);
 
         // Use HfInference client with the newest/fastest whisper model
-        const result = await hf.automaticSpeechRecognition({
+        const result = await getHf().automaticSpeechRecognition({
             model: "openai/whisper-large-v3-turbo",
             data: audioBuffer,
         });
