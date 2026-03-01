@@ -129,7 +129,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
         // Use Hugging Face Inference API
         const hfResponse = await axios.post(
-            "https://api-inference.huggingface.co/models/openai/whisper-large-v3",
+            "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3",
             fs.readFileSync(inputPath),
             {
                 headers: {
