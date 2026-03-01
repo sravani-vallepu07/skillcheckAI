@@ -117,24 +117,19 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     const inputPath = path.resolve(req.file.path);
     try {
         const formData = new FormData();
-        // Use the original filename or default to .webm if missing
-        const filename = req.file.originalname || "audio.webm";
-        const contentType = req.file.mimetype || "audio/webm";
-
         formData.append("file", fs.createReadStream(inputPath), {
-            filename: filename,
-            contentType: contentType,
+            filename: "audio.webm",
+            contentType: "audio/webm",
         });
-        // formData.append("model", "whisper-1");
+        formData.append("model", "openai/whisper-large-v3");
 
-        // Use Hugging Face Inference API (Distil-Whisper is faster and often more reliable on free tier)
         const hfResponse = await axios.post(
-            "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
-            fs.readFileSync(inputPath),
+            "https://api-inference.huggingface.co/v1/audio/transcriptions",
+            formData,
             {
                 headers: {
+                    ...formData.getHeaders(),
                     Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-                    "Content-Type": contentType.split(";")[0], // Sanitize Content-Type
                 },
             }
         );
@@ -145,7 +140,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
         const errorDetail = err.response?.data || err.message;
         console.error("Hugging Face error detail:", JSON.stringify(errorDetail));
 
-        const errorMsg = err.response?.data?.error || err.message || "Transcription failed";
+        const errorMsg = typeof err.response?.data?.error === 'string' ? err.response.data.error : (err.response?.data?.error?.message || err.message);
         res.status(500).json({ error: errorMsg });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
