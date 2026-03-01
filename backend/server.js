@@ -127,14 +127,14 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
         });
         // formData.append("model", "whisper-1");
 
-        // Use Hugging Face Inference API
+        // Use Hugging Face Inference API (Distil-Whisper is faster and often more reliable on free tier)
         const hfResponse = await axios.post(
-            "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3",
+            "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
             fs.readFileSync(inputPath),
             {
                 headers: {
                     Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-                    "Content-Type": contentType,
+                    "Content-Type": contentType.split(";")[0], // Sanitize Content-Type
                 },
             }
         );
@@ -142,8 +142,10 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
         res.json({ transcript: hfResponse.data.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        const errorMsg = err.response?.data?.error?.message || err.message || "Transcription failed";
-        console.error("Whisper error detail:", errorMsg);
+        const errorDetail = err.response?.data || err.message;
+        console.error("Hugging Face error detail:", JSON.stringify(errorDetail));
+
+        const errorMsg = err.response?.data?.error || err.message || "Transcription failed";
         res.status(500).json({ error: errorMsg });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
