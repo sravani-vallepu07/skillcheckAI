@@ -311,8 +311,12 @@ app.post("/api/github/push", async (req, res) => {
   }
 });
 
-// Hugo Face Transcription (using HF Inference API via Direct Axios)
-app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
+// Hugo Face Transcription V5 (Direct Axios)
+const ROOT_UPLOADS = path.join(__dirname, "uploads/");
+if (!fs.existsSync(ROOT_UPLOADS)) fs.mkdirSync(ROOT_UPLOADS, { recursive: true });
+const upload_root = multer({ dest: ROOT_UPLOADS });
+
+app.post("/api/transcribe", upload_root.single("audio"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No audio file provided" });
   const inputPath = path.resolve(req.file.path);
 
@@ -322,9 +326,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
     if (!token) throw new Error("HUGGING_FACE_API_KEY is missing in environment.");
 
-    console.log("--- TRANSCRIPTION ATTEMPT V4 (ROOT-DISTIL) ---");
+    console.log("--- TRANSCRIPTION ATTEMPT V5 (ROOT) ---");
     const response = await axios.post(
-      "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
+      "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
       audioData,
       {
         headers: {
@@ -334,17 +338,17 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
       }
     );
 
-    console.log("Response from HF (Root):", response.status);
+    console.log("HF V5 Status:", response.status);
     const transcript = response.data.text || response.data.transcript || "";
-    res.json({ transcript: transcript.trim(), _v: "v4" });
+    res.json({ transcript: transcript.trim(), _v: "v5" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   } catch (err) {
-    console.error("Transcription Error:", err.response?.data || err.message);
-    res.status(500).json({ error: (err.response?.data?.error || err.message) });
+    console.error("V5 Error (Root):", err.response?.data || err.message);
+    res.status(500).json({ error: (err.response?.data?.error || err.message), _v: "v5" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server [V4] running at http://localhost:${PORT}`);
+  console.log(`Server [V5] running at http://localhost:${PORT}`);
 });

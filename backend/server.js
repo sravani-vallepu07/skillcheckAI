@@ -137,7 +137,13 @@ app.get("/api/weeks/:weekId", (req, res) => {
 });
 
 // Whisper transcription
-const upload = multer({ dest: path.join(__dirname, "../uploads/") });
+// Whisper transcription
+const UPLOADS_DIR = path.join(__dirname, "../uploads/");
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+const upload = multer({ dest: UPLOADS_DIR });
+
+app.get("/api/health", (req, res) => res.json({ status: "ok", version: "v5" }));
+
 app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No audio file provided" });
     const inputPath = path.resolve(req.file.path);
@@ -147,9 +153,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
         if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-        console.log("--- TRANSCRIPTION ATTEMPT V4 (Distil-Whisper) ---");
+        console.log("--- TRANSCRIPTION ATTEMPT V5 ---");
         const response = await axios.post(
-            "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
+            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
             audioBuffer,
             {
                 headers: {
@@ -159,13 +165,13 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
             }
         );
 
-        console.log("Response from HF:", response.status);
+        console.log("HF V5 Status:", response.status);
         const transcript = response.data.text || response.data.transcript || "";
-        res.json({ transcript: transcript.trim(), _v: "v4" });
+        res.json({ transcript: transcript.trim(), _v: "v5" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        console.error("Transcription Error:", err.response?.data || err.message);
-        res.status(500).json({ error: (err.response?.data?.error || err.message) });
+        console.error("V5 Error:", err.response?.data || err.message);
+        res.status(500).json({ error: (err.response?.data?.error || err.message), _v: "v5" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }
 });
@@ -177,5 +183,5 @@ app.get("*", (req, res) => {
 
 // ── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-    console.log(`🚀 SkillCheckAI [V4] server running at http://localhost:${PORT}`);
+    console.log(`🚀 SkillCheckAI [V5] server running at http://localhost:${PORT}`);
 });
