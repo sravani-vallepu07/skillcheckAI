@@ -322,9 +322,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
     if (!token) throw new Error("HUGGING_FACE_API_KEY is missing in environment.");
 
-    console.log("--- TRANSCRIPTION ATTEMPT V3 (ROOT) ---");
+    console.log("--- TRANSCRIPTION ATTEMPT V4 (ROOT-DISTIL) ---");
     const response = await axios.post(
-      "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
+      "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
       audioData,
       {
         headers: {
@@ -336,7 +336,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
     console.log("Response from HF (Root):", response.status);
     const transcript = response.data.text || response.data.transcript || "";
-    res.json({ transcript: transcript.trim(), _v: "v3" });
+    res.json({ transcript: transcript.trim(), _v: "v4" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   } catch (err) {
     console.error("Transcription Error:", err.response?.data || err.message);
@@ -346,5 +346,5 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server [V3] running at http://localhost:${PORT}`);
+  console.log(`Server [V4] running at http://localhost:${PORT}`);
 });

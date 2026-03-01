@@ -147,9 +147,9 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
         if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-        console.log("--- TRANSCRIPTION ATTEMPT V3 (audio/webm) ---");
+        console.log("--- TRANSCRIPTION ATTEMPT V4 (Distil-Whisper) ---");
         const response = await axios.post(
-            "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo",
+            "https://router.huggingface.co/hf-inference/models/distil-whisper/distil-large-v3",
             audioBuffer,
             {
                 headers: {
@@ -161,7 +161,7 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
 
         console.log("Response from HF:", response.status);
         const transcript = response.data.text || response.data.transcript || "";
-        res.json({ transcript: transcript.trim(), _v: "v3" });
+        res.json({ transcript: transcript.trim(), _v: "v4" });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
         console.error("Transcription Error:", err.response?.data || err.message);
@@ -177,5 +177,5 @@ app.get("*", (req, res) => {
 
 // ── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-    console.log(`🚀 SkillCheckAI [V3] server running at http://localhost:${PORT}`);
+    console.log(`🚀 SkillCheckAI [V4] server running at http://localhost:${PORT}`);
 });
