@@ -7,6 +7,8 @@ const FormData = require("form-data");
 const fs = require("fs");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { HfInference } = require("@huggingface/inference");
+const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -116,31 +118,19 @@ app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No audio file provided" });
     const inputPath = path.resolve(req.file.path);
     try {
-        const formData = new FormData();
-        formData.append("file", fs.createReadStream(inputPath), {
-            filename: "audio.webm",
-            contentType: "audio/webm",
+        const audioBuffer = fs.readFileSync(inputPath);
+
+        // Use HfInference client with the newest/fastest whisper model
+        const result = await hf.automaticSpeechRecognition({
+            model: "openai/whisper-large-v3-turbo",
+            data: audioBuffer,
         });
-        formData.append("model", "openai/whisper-large-v3");
 
-        const hfResponse = await axios.post(
-            "https://api-inference.huggingface.co/v1/audio/transcriptions",
-            formData,
-            {
-                headers: {
-                    ...formData.getHeaders(),
-                    Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-                },
-            }
-        );
-
-        res.json({ transcript: hfResponse.data.text.trim() });
+        res.json({ transcript: result.text.trim() });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     } catch (err) {
-        const errorDetail = err.response?.data || err.message;
-        console.error("Hugging Face error detail:", JSON.stringify(errorDetail));
-
-        const errorMsg = typeof err.response?.data?.error === 'string' ? err.response.data.error : (err.response?.data?.error?.message || err.message);
+        console.error("Hugging Face error detail:", err.message);
+        const errorMsg = err.message || "Transcription failed";
         res.status(500).json({ error: errorMsg });
         if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
     }

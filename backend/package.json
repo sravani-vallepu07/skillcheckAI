@@ -8,6 +8,7 @@
         "dev": "nodemon server.js"
     },
     "dependencies": {
+        "@huggingface/inference": "^4.13.14",
         "axios": "^1.6.2",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
