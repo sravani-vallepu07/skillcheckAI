@@ -346,7 +346,10 @@ function App() {
             } else {
                 setLoginError(data.error);
             }
-        } catch (_) { setLoginError("Server error. Could not login."); }
+        } catch (err) {
+            console.error("Login Error:", err);
+            setLoginError("Connection refused. Please check if the server is running.");
+        }
     }
 
     async function handleRegister() {
@@ -363,7 +366,10 @@ function App() {
             } else {
                 setLoginError(data.error);
             }
-        } catch (_) { setLoginError("Server error. Could not register."); }
+        } catch (err) {
+            console.error("Registration Error:", err);
+            setLoginError("Connection refused. Please check if the server is running.");
+        }
     }
 
     async function handleForgotPassword() {
