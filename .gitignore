@@ -1,13 +1,7 @@
-# Dependencies
 node_modules/
-
-# Environment Variables
+backend/node_modules/
 .env
-
-# Data and File Uploads
+backend/.env
 data.json
 uploads/
-
-# OS Generated
-.DS_Store
-Thumbs.db
+*.log
