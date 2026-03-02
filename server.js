@@ -324,30 +324,52 @@ app.post("/api/transcribe", upload_root.single("audio"), async (req, res) => {
     const token = process.env.HUGGING_FACE_API_KEY || process.env.HF_TOKEN;
     if (!token) throw new Error("HUGGING_FACE_API_KEY is missing.");
 
-    const formData = new FormData();
-    formData.append("file", fs.createReadStream(inputPath));
-    formData.append("model", "openai/whisper-large-v3-turbo");
+    const audioBuffer = fs.readFileSync(inputPath);
+    const mimeType = req.file.mimetype || "audio/webm";
 
-    console.log("--- TRANSCRIPTION ATTEMPT V6 (ROOT) ---");
+    console.log(`--- TRANSCRIPTION ATTEMPT V10 (Strict Headers - ROOT) ---`);
+    console.log(`Sending: ${mimeType}, Expecting: application/json`);
+
     const response = await axios.post(
-      "https://api-inference.huggingface.co/v1/audio/transcriptions",
-      formData,
+      "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3-turbo",
+      audioBuffer,
       {
         headers: {
-          ...formData.getHeaders(),
           "Authorization": `Bearer ${token}`,
+          "Content-Type": mimeType,
+          "Accept": "application/json",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+        timeout: 90000
       }
     );
 
-    console.log("HF V6 Status:", response.status);
+    console.log("HF V10 Status (Root):", response.status);
     const transcript = response.data.text || "";
-    res.json({ transcript: transcript.trim(), _v: "v6" });
+
+    if (!transcript) {
+      throw new Error("Hugging Face returned an empty transcript.");
+    }
+
+    res.json({ transcript: transcript.trim(), _v: "v10" });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   } catch (err) {
     const detail = err.response?.data || err.message;
-    console.error("V6 Error (Root):", detail);
-    res.status(500).json({ error: (detail.error?.message || detail.error || err.message), _v: "v6" });
+    const isHtml = typeof detail === "string" && detail.includes("<!doctype");
+    console.error("V10 Error (Root):", isHtml ? "HTML Error Page Received" : detail);
+
+    if (detail.error && typeof detail.error === "string" && detail.error.includes("loading")) {
+      return res.status(503).json({
+        error: "Model is starting up. Please try again in 30 seconds.",
+        _v: "v10"
+      });
+    }
+
+    res.status(500).json({
+      error: (detail.error?.message || detail.error || (isHtml ? "Hugging Face API migration error." : err.message)),
+      _v: "v10"
+    });
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   }
 });
