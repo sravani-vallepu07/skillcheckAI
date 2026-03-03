@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const submissionSchema = new mongoose.Schema({
     studentId: { type: String, required: true },
     studentName: { type: String, required: true },
+    rollNo: { type: String },
     weekId: { type: String, required: true },
     questionId: { type: String, required: true },
     questionTitle: { type: String, default: "" },

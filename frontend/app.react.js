@@ -1,7 +1,7 @@
 const { useEffect, useMemo, useRef, useState, useCallback } = React;
 
-const STUDENT_EMAIL_PATTERN = /^n\d+@rguktn\.ac\.in$/i;
-const FACULTY_EMAIL_PATTERN = /^[a-z0-9._%+-]+@rguktn\.ac\.in$/i;
+const STUDENT_EMAIL_PATTERN = /^n\d+@rguktn\.ac\.in$|^vallepus39@gmail\.com$/i;
+const FACULTY_EMAIL_PATTERN = /rguktn\.ac\.in$|^sravanivallepu07@gmail\.com$/i;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function formatTime(msRemaining) {
@@ -362,7 +362,7 @@ function App() {
             });
             const data = await res.json();
             if (res.ok) {
-                setSession({ role: data.role, email: data.email, name: data.name });
+                setSession({ role: data.role, email: data.email, name: data.name, rollNo: data.rollNo });
             } else {
                 setLoginError(data.error);
             }
@@ -382,7 +382,13 @@ function App() {
             });
             const data = await res.json();
             if (res.ok) {
-                setSession({ role: data.role, email: data.email, name: data.name });
+                if (data.needsVerification) {
+                    setLoginError("Verification link sent! Check your mail.");
+                    setAuthMode("login");
+                    setLoginPassword("");
+                } else {
+                    setSession({ role: data.role, email: data.email, name: data.name, rollNo: data.rollNo });
+                }
             } else {
                 setLoginError(data.error);
             }
@@ -477,6 +483,7 @@ function App() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 studentId: session.email, studentName: session.name,
+                rollNo: session.rollNo,
                 weekId: activeWeek.id, questionId: activeQuestion.id,
                 questionTitle: activeQuestion.title,
                 githubUrl: studentGithubUrl.trim(),
@@ -498,8 +505,8 @@ function App() {
         setFacultyWeekId(weekId);
         setFacultyStudentId(""); setFacultyQuestion(null);
         const submissions = await fetch(`/api/submissions/week/${weekId}`).then(r => r.json());
-        const unique = Array.from(new Set(submissions.map(s => s.studentId)));
-        setFacultyStudents(unique);
+        const unique = submissions.filter((v, i, a) => a.findIndex(t => t.studentId === v.studentId) === i);
+        setFacultyStudents(unique.map(s => ({ email: s.studentId, studentName: s.studentName, rollNo: s.rollNo })));
     }
 
     async function loadFacultyStudent(studentId) {
@@ -677,7 +684,7 @@ function App() {
             <header className="app-header">
                 <div className="header-text">
                     <h1>SkillCheckAI</h1>
-                    <p>Weekly DSA practice, GitHub submissions &amp; voice explanations</p>
+                    <p>Lab-wise DSA practice, GitHub submissions &amp; voice explanations</p>
                 </div>
                 <div className="role-switch">
                     <span className="pill">{isStudent ? "Student" : "Faculty"}</span>
@@ -695,7 +702,7 @@ function App() {
                                 <h2>Student Dashboard</h2>
                                 <p className="input-hint">Logged in as {session.email}</p>
                             </div>
-                            <span className="pill">{selectedWeekTitle || "Select a week"}</span>
+                            <span className="pill">{selectedWeekTitle || "Select a lab"}</span>
                         </div>
 
                         {/* Week list */}
@@ -707,7 +714,7 @@ function App() {
                                             <strong>{week.title}</strong>
                                             <p>{week.summary || `${week.questionCount} questions`}</p>
                                         </div>
-                                        <button className="primary" type="button" onClick={() => openWeek(week.id)}>Open</button>
+                                        <button className="primary" type="button" onClick={() => openWeek(week.id)}>Open Lab</button>
                                     </div>
                                 ))}
                             </div>
@@ -717,7 +724,7 @@ function App() {
                         {studentStep === "questions" && activeWeek && (
                             <>
                                 <div className="breadcrumb">
-                                    <button className="ghost back-btn" onClick={() => { setActiveWeek(null); setStudentStep("weeks"); }}>← Weeks</button>
+                                    <button className="ghost back-btn" onClick={() => { setActiveWeek(null); setStudentStep("weeks"); }}>← Labs</button>
                                     <span>/</span>
                                     <span>{activeWeek.title}</span>
                                 </div>
@@ -756,7 +763,7 @@ function App() {
                                         ))}
                                     </div>
                                     <button className="primary" type="button" onClick={startCoding} style={{ width: "fit-content" }}>
-                                        🚀 Start Coding
+                                        Copy Code
                                     </button>
                                 </div>
                             </>
@@ -809,7 +816,7 @@ function App() {
 
                                         {/* Column 2: Report */}
                                         <div className="code-column">
-                                            <h3>📝 Written Report</h3>
+                                            <h3>Written Report</h3>
                                             <p className="input-hint">Summarize your approach, edge cases &amp; complexity.</p>
                                             <textarea
                                                 style={{ flex: 1, minHeight: "280px" }}
@@ -919,7 +926,7 @@ function App() {
                         {facultyWeekId && !facultyStudentId && (
                             <>
                                 <div className="breadcrumb">
-                                    <button className="ghost back-btn" onClick={() => setFacultyWeekId("")}>← Weeks</button>
+                                    <button className="ghost back-btn" onClick={() => setFacultyWeekId("")}>← Labs</button>
                                     <span>/</span>
                                     <span>{weeks.find(w => w.id === facultyWeekId)?.title}</span>
                                 </div>
@@ -930,7 +937,7 @@ function App() {
                                     {facultyStudents.map((student) => (
                                         <div className="list-card" key={student}>
                                             <div>
-                                                <strong>{student}</strong>
+                                                <strong>{student.studentName || student.email} ({student.rollNo || "No Roll No"})</strong>
                                                 <p>Click to review this student's attempts</p>
                                             </div>
                                             <button className="primary" type="button" onClick={() => loadFacultyStudent(student)}>Open</button>
@@ -980,6 +987,10 @@ function App() {
                                             {facultyQuestion.status || "submitted"}
                                         </span>
                                     </div>
+
+                                    {facultyQuestion.studentId && (
+                                        <p style={{ margin: "0 0 10px", color: "var(--muted)" }}>Student: {facultyQuestion.studentName || facultyQuestion.studentId} ({facultyQuestion.rollNo || "No Roll No"})</p>
+                                    )}
 
                                     {facultyQuestion.submittedAt && (
                                         <p className="input-hint">Submitted: {new Date(facultyQuestion.updatedAt || facultyQuestion.createdAt).toLocaleString()}</p>

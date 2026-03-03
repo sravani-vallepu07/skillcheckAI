@@ -2,9 +2,33 @@ const express = require("express");
 const router = express.Router();
 const crypto = require("crypto");
 const User = require("../models/User");
-const { sendWelcomeEmail, sendPasswordResetEmail } = require("../email");
+const { sendWelcomeEmail, sendPasswordResetEmail, sendVerificationEmail } = require("../email");
+const { STUDENT_ROLL_NOS, STUDENT_GMAILS, FACULTY_EMAILS } = require("../whitelist");
 
-// Check if email is already registered (for Sign In vs Login toggle)
+// Helper to validate and extract info from email
+function getEmailInfo(email, role) {
+    const cleanEmail = email.toLowerCase().trim();
+    if (role === "faculty") {
+        const isWhitelisted = FACULTY_EMAILS.includes(cleanEmail);
+        return { valid: isWhitelisted, role: "faculty" };
+    }
+    if (role === "student") {
+        // Check special gmail
+        if (STUDENT_GMAILS.includes(cleanEmail)) {
+            return { valid: true, role: "student", rollNo: "GUEST" };
+        }
+        // Check rguktn pattern: n210577@rguktn.ac.in
+        const match = cleanEmail.match(/^(n\d+)@rguktn\.ac\.in$/);
+        if (match) {
+            const rollNo = match[1].toUpperCase();
+            const isWhitelisted = STUDENT_ROLL_NOS.includes(rollNo);
+            return { valid: isWhitelisted, role: "student", rollNo };
+        }
+    }
+    return { valid: false };
+}
+
+// Check if email is already registered
 router.post("/check-email", async (req, res) => {
     const { email, role } = req.body;
     try {
@@ -21,19 +45,68 @@ router.post("/register", async (req, res) => {
     if (!email || !password || !role) {
         return res.status(400).json({ error: "Email, password and role are required." });
     }
+
+    const info = getEmailInfo(email, role);
+    if (!info.valid) {
+        return res.status(403).json({ error: "invalid mail" });
+    }
+
     try {
         const existing = await User.findOne({ email: email.toLowerCase().trim(), role });
         if (existing) {
             return res.status(409).json({ error: "Email already registered. Please Login." });
         }
-        const user = new User({ email: email.toLowerCase().trim(), password, role });
+
+        const verificationToken = crypto.randomBytes(32).toString("hex");
+        const user = new User({
+            email: email.toLowerCase().trim(),
+            password,
+            role,
+            rollNo: info.rollNo,
+            isVerified: false,
+            verificationToken
+        });
         await user.save();
-        // Send welcome email (non-blocking)
-        sendWelcomeEmail(user.email, email.split("@")[0]);
-        res.json({ success: true, email: user.email, role: user.role, name: email.split("@")[0] });
+
+        // Send verification email
+        await sendVerificationEmail(user.email, verificationToken);
+
+        res.json({
+            success: true,
+            message: "Registration successful! A verification email has been sent to your inbox. Please verify to login.",
+            needsVerification: true
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server error during registration." });
+    }
+});
+
+// Verify Email Route (GET)
+router.get("/verify-email", async (req, res) => {
+    const { token } = req.query;
+    if (!token) return res.status(400).send("Verification token is missing.");
+
+    try {
+        const user = await User.findOne({ verificationToken: token });
+        if (!user) {
+            return res.status(400).send("Invalid or expired verification link.");
+        }
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        await user.save();
+
+        // Success page (simple HTML)
+        res.send(`
+            <div style="font-family:sans-serif; text-align:center; padding:50px;">
+                <h1 style="color:#2563eb;">Email Verified!</h1>
+                <p>Your account is now active. You can close this window and login to SkillCheckAI.</p>
+                <a href="${process.env.APP_URL}" style="display:inline-block; margin-top:20px; padding:10px 20px; background:#2563eb; color:white; text-decoration:none; border-radius:5px;">Go to App</a>
+            </div>
+        `);
+    } catch (err) {
+        res.status(500).send("Server error during verification.");
     }
 });
 
@@ -51,7 +124,16 @@ router.post("/login", async (req, res) => {
         if (user.password !== password) {
             return res.status(401).json({ error: "Incorrect password. Please try again." });
         }
-        res.json({ success: true, email: user.email, role: user.role, name: email.split("@")[0] });
+        if (!user.isVerified) {
+            return res.status(403).json({ error: "Please verify your email before logging in. Check your inbox." });
+        }
+        res.json({
+            success: true,
+            email: user.email,
+            role: user.role,
+            name: email.split("@")[0],
+            rollNo: user.rollNo
+        });
     } catch (err) {
         res.status(500).json({ error: "Server error during login." });
     }
@@ -64,7 +146,6 @@ router.post("/forgot-password", async (req, res) => {
     try {
         const user = await User.findOne({ email: email.toLowerCase().trim(), role });
         if (!user) {
-            // Security: don't reveal whether user exists
             return res.json({ success: true, message: "If this email is registered, a reset link has been sent." });
         }
         const token = crypto.randomBytes(32).toString("hex");
