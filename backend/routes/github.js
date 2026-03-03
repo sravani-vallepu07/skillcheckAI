@@ -13,17 +13,36 @@ if (!global.userGithubNames) global.userGithubNames = {};
 // Initiate GitHub OAuth
 router.get("/login", (req, res) => {
     const { studentId } = req.query;
-    const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(GITHUB_CALLBACK_URL)}&scope=repo&state=${encodeURIComponent(studentId)}&prompt=consent`;
+    let callbackUrl = GITHUB_CALLBACK_URL;
+
+    // Support local vs production dynamically if possible
+    const host = req.headers.host;
+    if (host) {
+        if (host.includes("localhost")) {
+            callbackUrl = `http://${host}/auth/github/callback`;
+        } else if (host.includes("onrender.com")) {
+            callbackUrl = `https://${host}/auth/github/callback`;
+        }
+    }
+
+    const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(callbackUrl)}&scope=repo&state=${encodeURIComponent(studentId)}&prompt=consent`;
     res.redirect(url);
 });
 
 // GitHub OAuth callback
 router.get("/callback", async (req, res) => {
     const { code, state } = req.query;
+    let callbackUrl = GITHUB_CALLBACK_URL;
+    const host = req.headers.host;
+    if (host) {
+        if (host.includes("localhost")) callbackUrl = `http://${host}/auth/github/callback`;
+        else if (host.includes("onrender.com")) callbackUrl = `https://${host}/auth/github/callback`;
+    }
+
     try {
         const response = await axios.post(
             "https://github.com/login/oauth/access_token",
-            { client_id: GITHUB_CLIENT_ID, client_secret: GITHUB_CLIENT_SECRET, code, redirect_uri: GITHUB_CALLBACK_URL },
+            { client_id: GITHUB_CLIENT_ID, client_secret: GITHUB_CLIENT_SECRET, code, redirect_uri: callbackUrl },
             { headers: { Accept: "application/json" } }
         );
         if (state && response.data.access_token) {

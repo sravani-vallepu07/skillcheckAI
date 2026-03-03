@@ -181,6 +181,7 @@ function App() {
     // GitHub
     const [githubConnected, setGithubConnected] = useState(false);
     const [githubUsername, setGithubUsername] = useState("");
+    const [githubLoading, setGithubLoading] = useState(false);
     const [isPushing, setIsPushing] = useState(false);
 
     // Recording
@@ -224,6 +225,7 @@ function App() {
                     const data = await res.json();
                     setGithubConnected(data.connected);
                     if (data.username) setGithubUsername(data.username);
+                    if (data.connected) setGithubLoading(false);
                 } catch (_) { }
             }, 3000);
             return () => clearInterval(interval);
@@ -452,6 +454,7 @@ function App() {
     function startRecord() { if (mediaRecorderRef.current && !isRecording) mediaRecorderRef.current.start(); }
 
     function handleGithubConnect() {
+        setGithubLoading(true);
         window.open(`/api/github/login?studentId=${encodeURIComponent(session.email)}`, "githubLogin", "width=600,height=700");
     }
 
@@ -864,7 +867,9 @@ function App() {
                                                                 </button>
                                                             </>
                                                         ) : (
-                                                            <button className="primary alt" type="button" onClick={handleGithubConnect}>Connect GitHub</button>
+                                                            <button className="primary alt" type="button" onClick={handleGithubConnect} disabled={githubLoading}>
+                                                                {githubLoading ? "Connecting..." : "Connect GitHub"}
+                                                            </button>
                                                         )}
                                                         <label>
                                                             <span className="field-label">GitHub Repo Link</span>
