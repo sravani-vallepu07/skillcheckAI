@@ -702,9 +702,32 @@ function App() {
                                 </label>
                                 {forgotErr && <div className="notice danger">{forgotErr}</div>}
                                 {forgotMsg && <div className="notice success">📧 {forgotMsg}</div>}
-                                <div style={{ display: "flex", gap: "10px" }}>
+                                <div style={{ display: "grid", gap: "10px" }}>
                                     <button className="primary" type="button" onClick={handleForgotPassword} disabled={forgotLoading} style={{ flex: 1 }}>
                                         {forgotLoading ? "Sending..." : "Send Reset Link"}
+                                    </button>
+                                    <button
+                                        className="ghost"
+                                        type="button"
+                                        style={{ fontSize: "11px", opacity: 0.7 }}
+                                        onClick={async () => {
+                                            const email = forgotEmail.trim();
+                                            if (!email) { alert("Enter email first."); return; }
+                                            setForgotMsg("Running connectivity test...");
+                                            try {
+                                                const res = await fetch("/api/auth/test-email", {
+                                                    method: "POST",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify({ email })
+                                                });
+                                                const data = await res.json();
+                                                if (data.success) alert("✅ SUCCESS: " + data.message);
+                                                else alert("❌ FAILED: " + data.error + "\n\nDetails: " + data.details + "\n\nHint: " + data.hint);
+                                            } catch (e) { alert("Server error during test."); }
+                                            setForgotMsg("");
+                                        }}
+                                    >
+                                        🛠️ Test Connectivity
                                     </button>
                                     <button className="ghost" type="button" onClick={() => { setShowForgot(false); setForgotMsg(""); setForgotErr(""); }}>
                                         Cancel

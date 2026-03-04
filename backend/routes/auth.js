@@ -198,4 +198,29 @@ router.post("/reset-password", async (req, res) => {
     }
 });
 
+// Diagnostic: Test Email Connectivity
+router.post("/test-email", async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email target is required." });
+    console.log(`[Diagnostic] Attempting test email to ${email}`);
+    try {
+        const { sendPasswordResetEmail } = require("../email");
+        // We'll use a dummy token for the test
+        await sendPasswordResetEmail(email, "test-token-12345");
+
+        res.json({
+            success: true,
+            message: "Test email sent successfully! Please check your inbox and SPAM folder.",
+        });
+    } catch (err) {
+        console.error("[Diagnostic] Email Test Failed:", err);
+        res.status(500).json({
+            success: false,
+            error: "Email test failed.",
+            details: err.message,
+            hint: "Check your EMAIL_USER and EMAIL_PASS (App Password) in Render environment variables. Also ensure APP_URL is set."
+        });
+    }
+});
+
 module.exports = router;
