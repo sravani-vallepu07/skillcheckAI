@@ -962,12 +962,12 @@ function App() {
                                         <div className="notice">No submissions yet for this week.</div>
                                     )}
                                     {facultyStudents.map((student) => (
-                                        <div className="list-card" key={student}>
+                                        <div className="list-card" key={student.email}>
                                             <div>
                                                 <strong>{student.studentName || student.email} ({student.rollNo || "No Roll No"})</strong>
                                                 <p>Click to review this student's attempts</p>
                                             </div>
-                                            <button className="primary" type="button" onClick={() => loadFacultyStudent(student)}>Open</button>
+                                            <button className="primary" type="button" onClick={() => loadFacultyStudent(student.email)}>Open</button>
                                         </div>
                                     ))}
                                 </div>
@@ -1037,6 +1037,13 @@ function App() {
                                         <pre className="example-card" style={{ margin: 0, overflowX: "auto" }}>
                                             {facultyQuestion.code || "No code submitted."}
                                         </pre>
+                                    </div>
+
+                                    <div className="card light">
+                                        <h4 style={{ margin: "0 0 10px", color: "var(--text)" }}>Written Report</h4>
+                                        <p style={{ margin: 0, color: "var(--muted)", whiteSpace: "pre-wrap" }}>
+                                            {facultyQuestion.report || "No report submitted."}
+                                        </p>
                                     </div>
 
                                     <div className="card light">
