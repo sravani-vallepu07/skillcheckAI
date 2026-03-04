@@ -11,9 +11,7 @@ function getTransporter() {
   }
 
   transporterInstance = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -88,8 +86,8 @@ async function sendPasswordResetEmail(to, token) {
     const baseUrl = (process.env.APP_URL || "").replace(/\/$/, "");
     const resetUrl = `${baseUrl}/reset-password?token=${token}`;
     console.log(`[Email] Sending password reset email to: ${to}`);
-    await transporter.sendMail({
-      from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
       to,
       subject: "SkillCheckAI – Reset Your Password",
       html: `
@@ -130,7 +128,7 @@ async function sendPasswordResetEmail(to, token) {
         </div>
       `,
     });
-    console.log("Password reset email sent to:", to);
+    console.log(`[Email] Password reset email sent to ${to}. MessageID: ${info.messageId}`);
   } catch (err) {
     console.error("Failed to send password reset email:", err.message);
     throw err;

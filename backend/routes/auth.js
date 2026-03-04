@@ -144,16 +144,22 @@ router.post("/forgot-password", async (req, res) => {
     console.log(`[Auth] Forgot password request for ${email} (${role})`);
     console.log(`[Auth] Using SMTP User: ${process.env.EMAIL_USER || "MISSING"}`);
     try {
-        const user = await User.findOne({ email: email.toLowerCase().trim(), role });
+        let user = await User.findOne({ email: email.toLowerCase().trim(), role });
         if (!user) {
-            console.log(`[Auth] Forgot password: User not found for ${email}`);
-            return res.json({ success: true, message: "If this email is registered, a reset link has been sent." });
+            console.log(`[Auth] Forgot password: User not found for ${email} as ${role}. Checking other roles...`);
+            user = await User.findOne({ email: email.toLowerCase().trim() });
+            if (user) {
+                console.log(`[Auth] Forgot password: Found user ${email} but with role ${user.role} instead of requested ${role}. Proceeding anyway.`);
+            } else {
+                console.log(`[Auth] Forgot password: User not found for ${email} at all.`);
+                return res.json({ success: true, message: "If this email is registered, a reset link has been sent." });
+            }
         }
         const token = crypto.randomBytes(32).toString("hex");
         user.resetToken = token;
         user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
         await user.save();
-        console.log(`[Auth] Sending reset email to ${user.email}`);
+        console.log(`[Auth] Sending reset email to ${user.email} (Message scheduled on Render)`);
         await sendPasswordResetEmail(user.email, token);
         res.json({ success: true, message: "Password reset email sent. Please check your inbox." });
     } catch (err) {
