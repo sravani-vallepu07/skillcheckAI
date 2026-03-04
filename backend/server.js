@@ -37,6 +37,9 @@ console.log("Check Env - HUGGING_FACE_API_KEY:", process.env.HUGGING_FACE_API_KE
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Enable trust proxy for Render/proxies to correctly detect HTTPS and Host
+app.set("trust proxy", 1);
+
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
