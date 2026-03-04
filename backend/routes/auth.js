@@ -142,6 +142,7 @@ router.post("/forgot-password", async (req, res) => {
     const { email, role } = req.body;
     if (!email) return res.status(400).json({ error: "Email is required." });
     console.log(`[Auth] Forgot password request for ${email} (${role})`);
+    console.log(`[Auth] Using SMTP User: ${process.env.EMAIL_USER || "MISSING"}`);
     try {
         const user = await User.findOne({ email: email.toLowerCase().trim(), role });
         if (!user) {

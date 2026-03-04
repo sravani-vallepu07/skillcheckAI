@@ -1,7 +1,16 @@
 const nodemailer = require("nodemailer");
 
-function createTransporter() {
-  const transporter = nodemailer.createTransport({
+let transporterInstance = null;
+
+function getTransporter() {
+  if (transporterInstance) return transporterInstance;
+
+  console.log("[Email] Initializing SMTP transporter...");
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error("[Email] CRITICAL: EMAIL_USER or EMAIL_PASS environment variables are missing!");
+  }
+
+  transporterInstance = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
@@ -11,21 +20,21 @@ function createTransporter() {
     },
   });
 
-  // Verify connection configuration
-  transporter.verify(function (error, success) {
+  transporterInstance.verify((error) => {
     if (error) {
-      console.error("SMTP Connection Error:", error);
+      console.error("[Email] SMTP Verification Failed:", error.message);
     } else {
-      console.log("SMTP Server is ready to take our messages");
+      console.log("[Email] SMTP Server is ready.");
     }
   });
 
-  return transporter;
+  return transporterInstance;
 }
 
 async function sendWelcomeEmail(to, name) {
   try {
-    const transporter = createTransporter();
+    const transporter = getTransporter();
+    console.log(`[Email] Sending welcome email to: ${to}`);
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
@@ -75,9 +84,10 @@ async function sendWelcomeEmail(to, name) {
 
 async function sendPasswordResetEmail(to, token) {
   try {
-    const transporter = createTransporter();
+    const transporter = getTransporter();
     const baseUrl = (process.env.APP_URL || "").replace(/\/$/, "");
     const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+    console.log(`[Email] Sending password reset email to: ${to}`);
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
@@ -129,9 +139,10 @@ async function sendPasswordResetEmail(to, token) {
 
 async function sendVerificationEmail(to, token) {
   try {
-    const transporter = createTransporter();
+    const transporter = getTransporter();
     const baseUrl = (process.env.APP_URL || "").replace(/\/$/, "");
     const verifyUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
+    console.log(`[Email] Sending verification email to: ${to}`);
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
