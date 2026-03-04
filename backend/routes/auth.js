@@ -141,19 +141,22 @@ router.post("/login", async (req, res) => {
 router.post("/forgot-password", async (req, res) => {
     const { email, role } = req.body;
     if (!email) return res.status(400).json({ error: "Email is required." });
+    console.log(`[Auth] Forgot password request for ${email} (${role})`);
     try {
         const user = await User.findOne({ email: email.toLowerCase().trim(), role });
         if (!user) {
+            console.log(`[Auth] Forgot password: User not found for ${email}`);
             return res.json({ success: true, message: "If this email is registered, a reset link has been sent." });
         }
         const token = crypto.randomBytes(32).toString("hex");
         user.resetToken = token;
         user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
         await user.save();
+        console.log(`[Auth] Sending reset email to ${user.email}`);
         await sendPasswordResetEmail(user.email, token);
         res.json({ success: true, message: "Password reset email sent. Please check your inbox." });
     } catch (err) {
-        console.error(err);
+        console.error("[Auth] Forgot password error:", err);
         res.status(500).json({ error: "Failed to send reset email. Please try again." });
     }
 });

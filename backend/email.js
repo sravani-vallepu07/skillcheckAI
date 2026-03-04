@@ -76,7 +76,8 @@ async function sendWelcomeEmail(to, name) {
 async function sendPasswordResetEmail(to, token) {
   try {
     const transporter = createTransporter();
-    const resetUrl = `${process.env.APP_URL}/reset-password?token=${token}`;
+    const baseUrl = (process.env.APP_URL || "").replace(/\/$/, "");
+    const resetUrl = `${baseUrl}/reset-password?token=${token}`;
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
@@ -129,7 +130,8 @@ async function sendPasswordResetEmail(to, token) {
 async function sendVerificationEmail(to, token) {
   try {
     const transporter = createTransporter();
-    const verifyUrl = `${process.env.APP_URL}/api/auth/verify-email?token=${token}`;
+    const baseUrl = (process.env.APP_URL || "").replace(/\/$/, "");
+    const verifyUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
     await transporter.sendMail({
       from: `"SkillCheckAI" <${process.env.EMAIL_USER}>`,
       to,
