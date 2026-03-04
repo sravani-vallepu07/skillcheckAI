@@ -8,6 +8,9 @@ function getTransporter() {
   console.log("[Email] Initializing SMTP transporter...");
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.error("[Email] CRITICAL: EMAIL_USER or EMAIL_PASS environment variables are missing!");
+  } else {
+    const p = process.env.EMAIL_PASS;
+    console.log(`[Email] SMTP Config - User: ${process.env.EMAIL_USER}, Pass: ${p.substring(0, 2)}...${p.substring(p.length - 2)} (Length: ${p.length})`);
   }
 
   transporterInstance = nodemailer.createTransport({
@@ -16,6 +19,9 @@ function getTransporter() {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 10000, // 10s
+    greetingTimeout: 10000,   // 10s
+    socketTimeout: 20000,     // 20s
   });
 
   transporterInstance.verify((error) => {
