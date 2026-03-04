@@ -12,14 +12,12 @@ router.get("/login", (req, res) => {
     const { studentId } = req.query;
     if (!studentId) return res.status(400).send("studentId (email) is required");
 
-    let callbackUrl = GITHUB_CALLBACK_URL;
     const host = req.headers.host;
-    if (host && host.includes("localhost")) {
-        callbackUrl = `http://${host}/auth/github/callback`;
-    }
+    const protocol = req.headers["x-forwarded-proto"] || (host.includes("localhost") ? "http" : "https");
+    const callbackUrl = `${protocol}://${host}/auth/github/callback`;
 
     console.log(`[GitHub] Initiating login for ${studentId}`);
-    console.log(`[GitHub] Using Redirect URI: ${callbackUrl}`);
+    console.log(`[GitHub] Detected Redirect URI: ${callbackUrl}`);
 
     const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(callbackUrl)}&scope=repo&state=${encodeURIComponent(studentId)}&prompt=consent`;
     res.redirect(url);
@@ -30,11 +28,9 @@ router.get("/callback", async (req, res) => {
     const { code, state: studentId } = req.query;
     if (!code) return res.status(400).send("No code provided from GitHub");
 
-    let callbackUrl = GITHUB_CALLBACK_URL;
     const host = req.headers.host;
-    if (host && host.includes("localhost")) {
-        callbackUrl = `http://${host}/auth/github/callback`;
-    }
+    const protocol = req.headers["x-forwarded-proto"] || (host.includes("localhost") ? "http" : "https");
+    const callbackUrl = `${protocol}://${host}/auth/github/callback`;
 
     console.log(`[GitHub] Callback received for ${studentId}`);
     console.log(`[GitHub] Using Redirect URI for Token Exchange: ${callbackUrl}`);
