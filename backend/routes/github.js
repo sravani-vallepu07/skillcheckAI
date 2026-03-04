@@ -14,15 +14,9 @@ if (!global.userGithubNames) global.userGithubNames = {};
 router.get("/login", (req, res) => {
     const { studentId } = req.query;
     let callbackUrl = GITHUB_CALLBACK_URL;
-
-    // Support local vs production dynamically if possible
     const host = req.headers.host;
-    if (host) {
-        if (host.includes("localhost")) {
-            callbackUrl = `http://${host}/auth/github/callback`;
-        } else if (host.includes("onrender.com")) {
-            callbackUrl = `https://${host}/auth/github/callback`;
-        }
+    if (host && host.includes("localhost")) {
+        callbackUrl = `http://${host}/auth/github/callback`;
     }
 
     const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(callbackUrl)}&scope=repo&state=${encodeURIComponent(studentId)}&prompt=consent`;
@@ -34,9 +28,8 @@ router.get("/callback", async (req, res) => {
     const { code, state } = req.query;
     let callbackUrl = GITHUB_CALLBACK_URL;
     const host = req.headers.host;
-    if (host) {
-        if (host.includes("localhost")) callbackUrl = `http://${host}/auth/github/callback`;
-        else if (host.includes("onrender.com")) callbackUrl = `https://${host}/auth/github/callback`;
+    if (host && host.includes("localhost")) {
+        callbackUrl = `http://${host}/auth/github/callback`;
     }
 
     try {

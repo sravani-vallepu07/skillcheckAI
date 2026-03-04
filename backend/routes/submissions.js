@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
 
 // Save / update a submission
 router.post("/", async (req, res) => {
-    const { studentId, studentName, rollNo, weekId, questionId, questionTitle, githubUrl, code, transcript } = req.body;
+    const { studentId, studentName, rollNo, weekId, questionId, questionTitle, githubUrl, code, report, transcript } = req.body;
     if (!studentId || !studentName || !weekId || !questionId || !questionTitle) {
         return res.status(400).json({ error: "Missing required fields" });
     }
@@ -51,6 +51,7 @@ router.post("/", async (req, res) => {
         if (questionTitle) entry.questionTitle = questionTitle;
         if (githubUrl) entry.githubUrl = githubUrl;
         if (code) entry.code = code;
+        if (report) entry.report = report;
         if (transcript) entry.transcript = transcript;
         entry.updatedAt = new Date();
         entry.status = "submitted";

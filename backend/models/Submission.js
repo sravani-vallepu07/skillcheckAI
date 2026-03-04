@@ -9,6 +9,7 @@ const submissionSchema = new mongoose.Schema({
     questionTitle: { type: String, default: "" },
     githubUrl: { type: String, default: "" },
     code: { type: String, default: "" },
+    report: { type: String, default: "" },
     transcript: { type: String, default: "" },
     status: { type: String, default: "submitted" },
     createdAt: { type: Date, default: Date.now },
