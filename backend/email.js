@@ -14,21 +14,25 @@ function getTransporter() {
   }
 
   transporterInstance = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // Use StartTLS
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
-    connectionTimeout: 10000, // 10s
-    greetingTimeout: 10000,   // 10s
-    socketTimeout: 20000,     // 20s
+    connectionTimeout: 15000, // 15s
+    greetingTimeout: 15000,   // 15s
+    socketTimeout: 30000,     // 30s
   });
+
+  console.log(`[Email] SMTP Transporter Created - Host: smtp.gmail.com, Port: 587, Secure: false (StartTLS)`);
 
   transporterInstance.verify((error) => {
     if (error) {
       console.error("[Email] SMTP Verification Failed:", error.message);
     } else {
-      console.log("[Email] SMTP Server is ready.");
+      console.log("[Email] SMTP Server is ready (Port 587).");
     }
   });
 
