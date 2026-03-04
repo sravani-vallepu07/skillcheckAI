@@ -159,9 +159,15 @@ router.post("/forgot-password", async (req, res) => {
         user.resetToken = token;
         user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
         await user.save();
-        console.log(`[Auth] Sending reset email to ${user.email} (Message scheduled on Render)`);
-        await sendPasswordResetEmail(user.email, token);
-        res.json({ success: true, message: "Password reset email sent. Please check your inbox." });
+
+        console.log(`[Auth] Reset token saved. Triggering background email to ${user.email}`);
+
+        // Fire and forget (catch error in logs)
+        sendPasswordResetEmail(user.email, token).catch(err => {
+            console.error("[Auth] Background Reset Email Error:", err.message);
+        });
+
+        res.json({ success: true, message: "Password reset request received. Please check your inbox shortly." });
     } catch (err) {
         console.error("[Auth] Forgot password error:", err);
         res.status(500).json({ error: "Failed to send reset email. Please try again." });
