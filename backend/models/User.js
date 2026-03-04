@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
     verificationToken: { type: String },
     resetToken: { type: String },
     resetTokenExpiry: { type: Date },
+    githubAccessToken: { type: String },
+    githubUsername: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 
