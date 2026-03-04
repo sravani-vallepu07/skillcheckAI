@@ -63,8 +63,8 @@ router.post("/register", async (req, res) => {
             password,
             role,
             rollNo: info.rollNo,
-            isVerified: false,
-            verificationToken
+            isVerified: true, // Default to true as requested
+            verificationToken: undefined
         });
         await user.save();
 
@@ -73,8 +73,8 @@ router.post("/register", async (req, res) => {
 
         res.json({
             success: true,
-            message: "Registration successful! A verification email has been sent to your inbox. Please verify to login.",
-            needsVerification: true
+            message: "Registration successful! You can now login.",
+            needsVerification: false
         });
     } catch (err) {
         console.error(err);
@@ -124,9 +124,7 @@ router.post("/login", async (req, res) => {
         if (user.password !== password) {
             return res.status(401).json({ error: "Incorrect password. Please try again." });
         }
-        if (!user.isVerified) {
-            return res.status(403).json({ error: "Please verify your email before logging in. Check your inbox." });
-        }
+        // Removed isVerified check for immediate login
         res.json({
             success: true,
             email: user.email,

@@ -151,6 +151,8 @@ function App() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [loginConfirmPassword, setLoginConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loginError, setLoginError] = useState("");
     const [emailExists, setEmailExists] = useState(null); // null = unchecked, true/false
 
@@ -588,26 +590,46 @@ function App() {
                             {/* Password */}
                             <label>
                                 <span className="field-label">Password</span>
-                                <input
-                                    type="password"
-                                    placeholder="Enter your password"
-                                    value={loginPassword}
-                                    onChange={(e) => { setLoginPassword(e.target.value); setLoginError(""); }}
-                                    onKeyDown={(e) => e.key === "Enter" && (authMode === "login" ? handleLogin() : handleRegister())}
-                                />
+                                <div className="password-input-wrap">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Enter your password"
+                                        value={loginPassword}
+                                        onChange={(e) => { setLoginPassword(e.target.value); setLoginError(""); }}
+                                        onKeyDown={(e) => e.key === "Enter" && (authMode === "login" ? handleLogin() : handleRegister())}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle-btn"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        title={showPassword ? "Hide password" : "Show password"}
+                                    >
+                                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                                    </button>
+                                </div>
                             </label>
 
                             {/* Confirm Password (only for new users) */}
                             {authMode === "register" && (
                                 <label>
                                     <span className="field-label">Confirm Password</span>
-                                    <input
-                                        type="password"
-                                        placeholder="Re-enter your password"
-                                        value={loginConfirmPassword}
-                                        onChange={(e) => { setLoginConfirmPassword(e.target.value); setLoginError(""); }}
-                                        onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                                    />
+                                    <div className="password-input-wrap">
+                                        <input
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            placeholder="Re-enter your password"
+                                            value={loginConfirmPassword}
+                                            onChange={(e) => { setLoginConfirmPassword(e.target.value); setLoginError(""); }}
+                                            onKeyDown={(e) => e.key === "Enter" && handleRegister()}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle-btn"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            title={showConfirmPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+                                        </button>
+                                    </div>
                                 </label>
                             )}
 

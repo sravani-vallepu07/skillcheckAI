@@ -298,6 +298,37 @@ textarea:focus {
     box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
+.password-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--muted);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    user-select: none;
+    z-index: 10;
+}
+
+.password-toggle-btn:hover {
+    color: var(--primary);
+}
+
+.password-input-wrap input {
+    padding-right: 44px;
+}
+
 textarea {
     resize: vertical;
 }
